@@ -1,0 +1,11 @@
+<table id="table" border="1">
+{% for i in data %}
+<tr>
+{% for j in i %}
+<td>{{j.id}}</td>
+{% endfor %}
+<td>{{i.Syusseki.kaisu}}</td>
+</tr>
+{% endfor %}
+
+</table>
