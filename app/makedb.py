@@ -1,4 +1,4 @@
-from app.app import db
+from app.application import db
 from app.models.model import *
 def makedb():
     db.create_all()
@@ -6,8 +6,10 @@ def makedb():
     Gakusei.csv_reg('data/gakuseilist.csv')
     Kyoin.csv_reg('data/kyoin.csv')
     Timedef.csv_reg()
-    Kamoku.csv_reg("data/kougikamoku.csv")
-    KamokuKisoku.csv_reg("data/kougikamoku.csv")
+    #Kamoku.csv_reg("data/kougikamoku.csv")
+    Kamoku.csv_reg("data/kougikamokuyoubi.csv")
+    #KamokuKisoku.csv_reg("data/kougikamoku.csv")
+    KamokuKisoku.csv_reg("data/kougikamokuyoubi.csv")
     kamokudata = db.session.query(Kamoku).all()
     for s in kamokudata:
         Risyu.csv_reg(s.id)

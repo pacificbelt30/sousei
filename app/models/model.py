@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy, SessionBase
 from app.models import csvread
 #from app import env
-from app.app import db
+from app.application import db
 
 # kyoin password table
 class User(db.Model):
@@ -114,15 +114,17 @@ class Kamoku(db.Model):
     name = db.Column(db.String(80),nullable=False, unique=False)
     timedef_id = db.Column(db.Integer,db.ForeignKey('timedef.id'),nullable=False,unique=False)
     room = db.Column(db.String(120),nullable=False,unique=False)
+    youbi = db.Column(db.String(10),nullable=False,unique=False)
     kyoin_id1 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
     kyoin_id2 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
     kyoin_id3 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
 
-    def __init__(self, id, name, timedef_id, room, kyoin_id1, kyoin_id2, kyoin_id3):
+    def __init__(self, id, name, timedef_id, room, youbi, kyoin_id1, kyoin_id2, kyoin_id3):
         self.id = id
         self.name = name
         self.timedef_id = timedef_id
         self.room = room
+        self.youbi = youbi
         self.kyoin_id1 = kyoin_id1
         self.kyoin_id2 = kyoin_id2
         self.kyoin_id3 = kyoin_id3
@@ -134,7 +136,7 @@ class Kamoku(db.Model):
     @staticmethod
     def csv_reg(filename):
         data = csvread.csv_reader(filename)
-        dbdata = [Kamoku(s[0],s[1],db.session.query(Timedef).filter(s[4] == Timedef.zikan).first().id,'unknown',s[2],s[2],s[2]) for s in data]
+        dbdata = [Kamoku(s[0],s[1],db.session.query(Timedef).filter(s[5] == Timedef.zikan).first().id,'unknown',s[4],s[2],s[2],s[2]) for s in data]
         try:
             db.session.add_all(dbdata)
             db.session.commit()
@@ -199,7 +201,7 @@ class KamokuKisoku(db.Model):
         data = csvread.csv_reader(filename)
         #kamokujoindata = db.session.join(Kamoku,Timedef)
         #dbdata = [KamokuKisoku(s[0],s[6],s[7],db.session.query(Kamoku,Timedef).join(Kamoku,Kamoku.timedef_id==Timedef.id).filter(s[0]==Kamoku.id).first().Timedef.zikan) for s in data]
-        dbdata = [KamokuKisoku(s[0],s[6],s[7],90) for s in data]
+        dbdata = [KamokuKisoku(s[0],s[7],s[8],90) for s in data]
         try:
             db.session.add_all(dbdata)
             db.session.commit()
