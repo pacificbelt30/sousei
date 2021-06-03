@@ -25,5 +25,16 @@ services:
     ports:
     - 8080:80
 
+  nginx:
+    container_name: nginx_flask
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    ports:
+      - 5002:80
+      - 5001:5000
+    command: python3 /var/flask_app/run.py
+
 volumes:
   sousei_db:
+

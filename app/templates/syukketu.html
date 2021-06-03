@@ -1,0 +1,15 @@
+<style type="text/css">
+td{
+    width:60px;
+}
+</style>
+<table id="table" border="1">
+{% for i in data %}
+<tr>
+{% for j in i %}
+<td>{{j}}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+
+</table>

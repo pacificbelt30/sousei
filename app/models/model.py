@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy, SessionBase
 from app.models import csvread
 #from app import env
 from app.application import db
 
-# kyoin password table
+# 後に教員のログイン用のIDパスワードのテーブルとなるかもしれないやつ
 class User(db.Model):
     __tablename__ = 'user'
 
@@ -19,13 +20,14 @@ class User(db.Model):
         return '<User %r>' % self.id
 
 
+#学生データ
 class Gakusei(db.Model):
     __tablename__ = 'gakusei'
 
     id = db.Column(db.String(20),nullable=False, unique=True, primary_key=True) # IDm
     name = db.Column(db.String(80),nullable=False, unique=False)
     gakunen = db.Column(db.Integer,nullable=False,unique=False)
-    number = db.Column(db.String(120),nullable=False,unique=True)
+    number = db.Column(db.String(120),nullable=False,unique=True) # 学籍番号
 
     def __init__(self, id, name, gakunen, number):
         self.id = id
@@ -50,6 +52,7 @@ class Gakusei(db.Model):
             db.session.rollback()
 
 
+# 教員データ
 class Kyoin(db.Model):
     __tablename__ = 'kyoin'
 
@@ -78,6 +81,7 @@ class Kyoin(db.Model):
             db.session.rollback()
 
 
+# 講義時間定義
 class Timedef(db.Model):
     __tablename__ = 'timedef'
 
@@ -106,6 +110,7 @@ class Timedef(db.Model):
             db.session.rollback()
 
 
+# 科目データ,教員3人登録できる
 class Kamoku(db.Model):
     __tablename__ = 'kamoku'
 
@@ -146,6 +151,7 @@ class Kamoku(db.Model):
             db.session.rollback()
 
 
+# 履修者データ,科目と学生の組み合わせは重複なし
 class Risyu(db.Model):
     __tablename__ = 'risyu'
     __table_args__  =  ( db.UniqueConstraint ( 'kamoku_id' , 'gakusei_id' ),{}) 
@@ -177,14 +183,15 @@ class Risyu(db.Model):
             db.session.rollback()
 
     
+# 科目規則，受付開始時間，遅刻開始時間，終了時間
 class KamokuKisoku(db.Model):
     __tablename__ = 'kamokukisoku'
 
     #id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=True, primary_key=True) # 科目IDを外部キーにもつ
     id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=True, primary_key=True) # 科目IDを外部キーにもつ
-    start_syusseki = db.Column(db.Integer,nullable=False, unique=False) # +,- or 絶対時間
-    start_tikoku = db.Column(db.Integer,nullable=False, unique=False) # +,- or 絶対時間
-    end_uketuke = db.Column(db.Integer,nullable=False, unique=False) # +,- or 絶対時間
+    start_syusseki = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
+    start_tikoku = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
+    end_uketuke = db.Column(db.Integer,nullable=False, unique=False) # 受付終了時間（相対時間）
 
     def __init__(self, id, start_syusseki, start_tikoku, end_uketuke):
         self.id = id
@@ -211,6 +218,7 @@ class KamokuKisoku(db.Model):
             db.session.rollback()
 
 
+# 出席データ
 class Syusseki(db.Model):
     __tablename__ = 'syusseki'
     __table_args__  =  ( db.UniqueConstraint ( 'risyu_id' , 'kaisu' ),{}) 
@@ -238,7 +246,7 @@ class Syusseki(db.Model):
         dbdata = list()
         for s in data:
             try:
-                risyu = db.session.query(Risyu).filter(s[0]==Risyu.gakusei_id and kamoku == Risyu.kamoku_id).first().id
+                risyu = db.session.query(Risyu).filter(s[0]==Risyu.gakusei_id,kamoku == Risyu.kamoku_id).first().id
                 dbdata.append(Syusseki(risyu,s[1],kaisu,time.time()))
             except:
                 import traceback
@@ -252,6 +260,36 @@ class Syusseki(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+
+    @staticmethod
+    def csv_reg_nf(json):
+        import time
+        data = json["csv"].splitlines()
+        print(data)
+        data = [s.split(',') for s in data]
+        print(data)
+        dbdata = list()
+        for s in data:
+            try:
+                risyu = db.session.query(Risyu).filter(\
+                        s[0]==Risyu.gakusei_id,\
+                        json["kamoku"] == Risyu.kamoku_id\
+                        ).first().id
+                dbdata.append(Syusseki(risyu,s[1],json["kaisu"],time.time()))
+            except:
+                import traceback
+                traceback.print_exc()
+                db.session.rollback()
+        #dbdata = [Syusseki(,s[0]) for s in data]
+        try:
+            db.session.add_all(dbdata)
+            db.session.commit()
+        except:
+            import traceback
+            traceback.print_exc()
+            db.session.rollback()
+
+
 
 
 

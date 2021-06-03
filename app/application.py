@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """flask appの初期化を行い、flask appオブジェクトの実体を持つ"""
 from flask import Flask, request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy, SessionBase
@@ -21,6 +22,7 @@ def create_app():
           'db_name': env.DB_NAME
       })
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_POOL_SIZE"] = 3
 
     return app
 

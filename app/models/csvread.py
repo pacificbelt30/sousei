@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import csv
 def csv_reader(filename):
     try:
