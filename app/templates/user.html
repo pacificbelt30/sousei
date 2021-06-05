@@ -1,0 +1,34 @@
+
+<style>
+#sidebar {
+  width: 200px;
+  float: left;
+}
+#contents {
+  width: 520px;
+  float: right;
+  padding: 0 15px;
+}
+</style>
+<div>
+<div id="sidebar">
+    <ul class="side">
+    {%for i in kamoku_data%}
+    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name}}</a></li>
+    {%endfor%}
+    </ul>
+</div>
+</div>
+<!--
+<style type="text/css">
+td{
+    width:60px;
+}
+</style>
+<table id="table" border="1">
+<tr>
+<td>{{j}}</td>
+</tr>
+
+</table>
+-->

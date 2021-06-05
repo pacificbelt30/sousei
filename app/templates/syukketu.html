@@ -1,10 +1,32 @@
+
+<style type="text/css">
+#sidebar {
+  width: 200px;
+  float: left;
+}
+#contents {
+  width: 1000px;
+  float: right;
+  padding: 0 15px;
+}
+</style>
+<div>
+<div id="sidebar">
+    <ul class="side">
+    {%for i in kamoku_data%}
+    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name}}</a></li>
+    {%endfor%}
+    </ul>
+</div>
+</div>
+<div id="contents">
 <style type="text/css">
 td{
     width:60px;
 }
 </style>
 <table id="table" border="1">
-{% for i in data %}
+{% for i in syusseki_data %}
 <tr>
 {% for j in i %}
 <td>{{j}}</td>
@@ -13,3 +35,4 @@ td{
 {% endfor %}
 
 </table>
+</div>

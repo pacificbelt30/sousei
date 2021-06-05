@@ -51,6 +51,15 @@ class Gakusei(db.Model):
             traceback.print_exc()
             db.session.rollback()
 
+    @staticmethod
+    def add(id,name,gakunen,number):
+        try:
+            db.session.add(Gakusei(id,name,gakunen,number))
+            db.session.commit()
+        except:
+            return False
+        return True
+
 
 # 教員データ
 class Kyoin(db.Model):
@@ -121,8 +130,13 @@ class Kamoku(db.Model):
     room = db.Column(db.String(120),nullable=False,unique=False)
     youbi = db.Column(db.String(10),nullable=False,unique=False)
     kyoin_id1 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
-    kyoin_id2 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
-    kyoin_id3 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
+    #kyoin_id2 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
+    #kyoin_id3 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
+    timedef = db.relationship("Timedef")
+    kamokukisoku = db.relationship("KamokuKisoku",uselist=False,backref='kamoku')
+    #kamokukisoku = db.relationship("KamokuKisoku",backref=backref('kamoku', lazy='dynamic'))
+    #kamokukisoku = db.relationship("KamokuKisoku")
+    kyoin = db.relationship("Kyoin")
 
     def __init__(self, id, name, timedef_id, room, youbi, kyoin_id1, kyoin_id2, kyoin_id3):
         self.id = id
@@ -159,6 +173,8 @@ class Risyu(db.Model):
     id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=False, primary_key=True)
     kamoku_id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=False)
     gakusei_id = db.Column(db.String(20),db.ForeignKey('gakusei.number'),nullable=False, unique=False)
+    kamoku = db.relationship('Kamoku')
+    gakusei = db.relationship('Gakusei')
 
     def __init__(self, kamoku_id,gakusei_id):
         #self.id = id
@@ -192,6 +208,8 @@ class KamokuKisoku(db.Model):
     start_syusseki = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
     start_tikoku = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
     end_uketuke = db.Column(db.Integer,nullable=False, unique=False) # 受付終了時間（相対時間）
+    #kamoku = db.relationship('Kamoku',uselist=False,backref='kamokukisoku')
+    #kamoku = db.relationship('Kamoku')
 
     def __init__(self, id, start_syusseki, start_tikoku, end_uketuke):
         self.id = id
@@ -228,6 +246,7 @@ class Syusseki(db.Model):
     syukketu = db.Column(db.String(20),nullable=False, unique=False) # 
     kaisu = db.Column(db.Integer,nullable=False, unique=False) # 
     regist_date = db.Column(db.Float,nullable=False, unique=False) # UNIX時間？
+    risyu = db.relationship('Risyu')
 
     def __init__(self, risyu_id, syukketu, kaisu,regist_date):
         self.risyu_id = risyu_id
@@ -290,8 +309,27 @@ class Syusseki(db.Model):
             db.session.rollback()
 
 
+class CRUD:
+    @staticmethod
+    def add(model):
+        try:
+            db.session.add(model)
+            db.session.commit()
+        except:
+            return False
+        return True
 
+    @staticmethod
+    def read(model):
+        db.session.query(model)
 
+    @staticmethod
+    def update(model):
+        db.session.query(model)
+
+    @staticmethod
+    def delete(model):
+        pass
 
 if __name__=='__main__':
     db.create_all()
