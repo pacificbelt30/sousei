@@ -24,3 +24,4 @@ flask_app
 ├ requirements.py --- ライブラリ一覧
 └ www.py --- ルーティング
 ```
+localhost -> db
