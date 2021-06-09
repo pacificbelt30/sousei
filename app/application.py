@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""flask appの初期化を行い、flask appオブジェクトの実体を持つ"""
+"""
+flask appの初期化を行い、flask appオブジェクトの実体を持つ
+"""
 from flask import Flask, request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy, SessionBase
 from app import env

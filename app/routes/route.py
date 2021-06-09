@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-"""flask appの初期化を行い、flask appオブジェクトの実体を持つ"""
 from flask import Flask, request,jsonify,render_template
 from app.application import app
 from app.models.model import *
 import time
 
 #from models.database import init_db
-
 
 @app.route('/',methods=['GET'])
 def hello():
@@ -48,14 +46,18 @@ def syusseki_all(kamoku):
         array.append(list())
         for j in range(16):
             array[i].append('')
-        array[i][0] = risyudata[i].gakusei.number
-        array[i][1] = risyudata[i].gakusei.name
+        array[i][0] = risyudata[i].gakusei.number # ここが遅い
+        array[i][1] = risyudata[i].gakusei.name # ここが遅い
+        #array[i][0] = ''
+        #array[i][1] = ''
     for i in data:
         for j in range(len(array)):
             if array[j][1] == i.risyu.gakusei.name:
-                array[j][i.kaisu+1] = i.syukketu
+                array[j][i.kaisu+1] = i.syukketu # ここが遅い
+                #array[j][i.kaisu+1] = ' '
 
     return render_template('syukketu.html',syusseki_data=sorted(array,key=lambda x: x[0]),kamoku_data=kamoku_data)
+    #return render_template('test.html')
 
 # 履修者データを落とす用
 """
@@ -104,6 +106,12 @@ def csv_post():
     Syusseki.csv_reg_nf(json)
     return jsonify(json)
     #pass
+
+@app.route('/makedb',methods=['GET'])
+def mkdb():
+    from app.makedb import makedb
+    makedb()
+    return '成功'
 
 @app.route('/user/<string:name>',methods=['GET'])
 def user_index(name):

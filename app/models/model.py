@@ -173,8 +173,8 @@ class Risyu(db.Model):
     id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=False, primary_key=True)
     kamoku_id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=False)
     gakusei_id = db.Column(db.String(20),db.ForeignKey('gakusei.number'),nullable=False, unique=False)
-    kamoku = db.relationship('Kamoku')
-    gakusei = db.relationship('Gakusei')
+    kamoku = db.relationship('Kamoku',lazy='joined')
+    gakusei = db.relationship('Gakusei',lazy='joined')
 
     def __init__(self, kamoku_id,gakusei_id):
         #self.id = id
@@ -246,7 +246,7 @@ class Syusseki(db.Model):
     syukketu = db.Column(db.String(20),nullable=False, unique=False) # 
     kaisu = db.Column(db.Integer,nullable=False, unique=False) # 
     regist_date = db.Column(db.Float,nullable=False, unique=False) # UNIX時間？
-    risyu = db.relationship('Risyu')
+    risyu = db.relationship('Risyu',lazy='joined')
 
     def __init__(self, risyu_id, syukketu, kaisu,regist_date):
         self.risyu_id = risyu_id

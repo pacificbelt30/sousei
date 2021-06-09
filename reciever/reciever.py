@@ -25,3 +25,7 @@ with open(filename,'w') as f:
     writer = csv.writer(f)
     writer.writerows(risyusya_csv)
 
+class Reciever:
+    def __init__(self):
+        self.a = 0
+
