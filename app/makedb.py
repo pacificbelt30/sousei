@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from app.application import db
 from app.models.model import *
+
 def makedb():
     #データ登録
     db.create_all()

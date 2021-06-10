@@ -4,6 +4,16 @@ from flask_sqlalchemy import SQLAlchemy, SessionBase
 from app.models import csvread
 #from app import env
 from app.application import db
+"""
+データベーステーブル定義
+学生データ    ：Gakusei
+教員データ    ：Kyoin
+時間データ    ：Timedef
+科目データ    ：Kamoku
+科目規則データ：KamokuKisoku
+履修データ    ：Risyu
+出席データ    ：Syusseki
+"""
 
 # 後に教員のログイン用のIDパスワードのテーブルとなるかもしれないやつ
 class User(db.Model):

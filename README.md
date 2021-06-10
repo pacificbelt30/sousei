@@ -1,27 +1,96 @@
 # sousei
+
 ```
-flask_app
+sousei
+├ app ↓
+│
+├ run.py --- 実行スクリプト
+│
+├ docker-compose.yml --- docker-compose
+├ dockerrun.sh --- nginxコンテナ作成シェルスクリプト
+├ uwsgi.ini --- uwsgi初期化ファイル
+```
+```
+app
 ├ instance
-│ └ config  --- モデル
+│ └ config  
 │   ├ settings.py
 │   └ 
 ├ app
-│ ├ views
-│ │ ├ index.py
-│ │ └ 
-│ ├ models
+│ ├ routes --- ルーティング
+│ │ ├ route.py
+│ │ └ rasp_.py
+│ ├ models --- モデル
 │ │ ├ model.py
 │ │ └ 
-│ ├ templates
+│ ├ templates --- htmlファイル
 │ │ ├ index.html
 │ │ └ 
-│ ├ static
+│ ├ static --- js,cssファイル
 │ │ ├ index.css
 │ │ └ index.js
 │ └ 
 ├ application.py
-├ manager.py --- アプリ実行用スクリプト（アプリの入り口）
-├ requirements.py --- ライブラリ一覧
-└ www.py --- ルーティング
+├ __init__.py
+├ manager.py
+└ 
 ```
-localhost -> db
+
+
+# how to use
+以下を実行
+```sh
+git clone https://github.com/pacificbelt30/sousei
+cd sousei
+pip install -r requirements.txt
+```
+
+app/env.pyを作成し，
+- DB_USER
+- DB_PASS
+- DB_HOST
+- DB_PORT
+- DB_NAME
+
+を定義する．
+
+実行方法へ
+
+# 実行方法
+## nginxにdocker-composeを使用する
+以下のコマンドを実行しnginxコンテナを立ち上げる
+```sh
+docker-compose up -d
+```
+ブラウザで [http://localhost:5002](http://localhost:5002) に接続
+
+## nginxにdockerを使用する
+以下のコマンドを実行しnginxコンテナを立ち上げる
+```sh
+docker-compose up -d
+sh dockerrun.sh
+```
+ブラウザで [http://localhost:2000](http://localhost:2000) に接続  
+windowsの場合はdockerrun.shの中身だけ実行すれば多分ok
+
+## 自前環境
+```sh
+docker-compose up -d
+python run.py
+```
+ブラウザで [http://localhost:5000](http://localhost:5000) に接続
+
+http://localhost/makedb にアクセスすればdatabaseが作成される．
+
+# 必要なもの
+- data/  
+sousei/以下にdataディレクトリを作成し，各種データをcsvファイルとして入れておく
+- app/env.py
+
+# memo
+- docker内では ```nginx -g "daemon off;"``` でnginxを起動
+- docker内でdbにアクセスする場合ホスト名を localhost -> db に変更
+- docker内でwebサーバを用いるとホストマシンで使うより遥かに遅くなる
+
+# TODO
+- 認証
