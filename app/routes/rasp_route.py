@@ -4,23 +4,25 @@ from flask import Flask, request,jsonify,render_template,Blueprint
 from app.models.model import *
 import time
 
-# /csv からのアクセスポイント
+# /csv をルートとして見る
 rasp_route = Blueprint('csv', __name__, url_prefix='/csv')
 
 # 履修者データを落とす用
 """
+データ構造例
 {
 "kamoku":"F1",
-"start_syusseki":"+20",
+"start_syusseki":20,
 "csv":csvdata
 }
 """
+#/csv からアクセスできる
 @rasp_route.route('/',methods=['GET'])
 def csv_get():
-    kamoku = request.args.get('kamoku')
+    kamoku = request.args.get('kamoku') # getパラメータ取得 ex) /csv?kamoku=F1
     print(type(kamoku))
     #json = request.get_json()
-    data = {"kamoku":kamoku,"kisoku":"","csv":list()}
+    data = {"kamoku":kamoku,"kisoku":"","csv":list()} # 送信するデータ
     #risyudata = db.session.query(Risyu,Gakusei,Kamoku,KamokuKisoku).filter( \
         #Risyu.kamoku_id==kamoku,\
         #Risyu.gakusei_id==Gakusei.number,\
@@ -47,6 +49,7 @@ def csv_get():
     #pass
 
 # csvアップロード用
+#/csv からアクセスできる
 @rasp_route.route('/',methods=['POST'])
 def csv_post():
     json = request.get_json()
