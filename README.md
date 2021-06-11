@@ -37,7 +37,7 @@ app
 ```
 
 
-# how to use
+# 下準備
 以下を実行
 ```sh
 git clone https://github.com/pacificbelt30/sousei
@@ -94,3 +94,30 @@ sousei/以下にdataディレクトリを作成し，各種データをcsvファ
 
 # TODO
 - 認証
+
+# sqlalchemy
+テーブル定義はmodels/model.pyに書いてまする．
+
+[SQLAlchemyの使い方](https://qiita.com/tomo0/items/a762b1bc0f192a55eae8#delete)
+## create
+```
+db.session.add(modelclass)
+db.session.commit()
+```
+## read
+```
+db.session.query(modelclass)
+db.session.query(modelclass).filter(条件式).all() # 全件
+db.session.query(modelclass).filter(条件式).first() # 最初の1件
+```
+## update
+```
+user = db.session.query(modelclass).filter(条件式).first()
+user.id = 1
+db.session.commit()
+```
+## delete
+```
+db.session.query(modelclass).filter(条件式).delete()
+db.session.commit()
+```

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+<style type="text/css">
+#sidebar {
+  width: 200px;
+  float: left;
+}
+#contents {
+  width: 1000px;
+  float: right;
+  padding: 0 15px;
+}
+</style>
+</head>
+<body>
+<div>
+<div id="sidebar">
+    <ul class="side">
+    {%for i in kamoku_data%}
+    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name}}</a></li>
+    {%endfor%}
+    </ul>
+</div>
+</div>
+<div id="contents">
+<style type="text/css">
+td{
+    width:60px;
+}
+</style>
+<table id="table" border="1">
+
+</table>
+</div>
+<script type="text/javascript">
+current_list = {{syusseki_data|safe}}
+console.log(current_list)
+let table = document.getElementById('table')
+let rows=[];
+for(i=0;i<current_list.length;i++){
+    rows.push(table.insertRow(-1));
+    for(j=0;j<current_list[i].length;j++){
+        cell = rows[i].insertCell(-1);
+        cell.appendChild(document.createTextNode(current_list[i][j]));
+    }
+}
+</script>
+</body>
+</html>

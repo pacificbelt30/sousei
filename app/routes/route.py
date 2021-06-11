@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request,jsonify,render_template
+from flask import Flask, request,jsonify,render_template,url_for
 from app.application import app
 from app.models.model import *
 from app.routes import rasp_route
@@ -58,7 +58,19 @@ def syusseki_all(kamoku):
                 array[j][i.kaisu+1] = i.syukketu # ここが遅い
                 #array[j][i.kaisu+1] = ' '
 
-    return render_template('syukketu.html',syusseki_data=sorted(array,key=lambda x: x[0]),kamoku_data=kamoku_data)
+    #for i in range(len(risyudata)):
+        #array.append(list())
+        #array[i][0] = risyudata[i].gakusei.number # ここが遅い
+        #array[i][1] = risyudata[i].gakusei.name # ここが遅い
+    #array2 = list()
+    #for i in range(len(data)):
+        #array2.append(list())
+        #array2[i].append(i.risyu.gakusei_id)
+        #array2[i].append(i.syukketu)
+        #array2[i].append(i.kaisu)
+
+    #return render_template('syukketu.html',syusseki_data=sorted(array,key=lambda x: x[0]),kamoku_data=kamoku_data)
+    return render_template('syukketu2.html',syusseki_data=sorted(array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('test.html')
 
 @app.route('/makedb',methods=['GET'])
