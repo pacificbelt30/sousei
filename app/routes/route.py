@@ -8,6 +8,10 @@ import time
 #from models.database import init_db
 app.register_blueprint(rasp_route.rasp_route)
 
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file("img/favicon.ico")
+
 @app.route('/',methods=['GET'])
 def hello():
     start = time.time()
