@@ -2,7 +2,10 @@
 <html lang="ja">
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='draw_graph.js') }}"></script>
 <style type="text/css">
 #sidebar {
   width: 200px;
@@ -34,7 +37,9 @@ td{
 <table id="table" border="1">
 
 </table>
-</div>
+<div>
+<button id="dwnbtn" onclick="graph_download()">ダウンロード</button>
+<canvas id="myChart" height=300 width=500></canvas>
 <script type="text/javascript">
 current_list = {{syusseki_data|safe}}
 console.log(current_list)
@@ -48,5 +53,7 @@ for(i=0;i<current_list.length;i++){
     }
 }
 </script>
+</div>
+</div>
 </body>
 </html>

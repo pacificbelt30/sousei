@@ -46,7 +46,7 @@ def syusseki_all(kamoku):
     array = list()
     for i in range(len(risyudata)):
         array.append(list())
-        for j in range(16):
+        for j in range(17):
             array[i].append('')
         array[i][0] = risyudata[i].gakusei.number # ここが遅い
         array[i][1] = risyudata[i].gakusei.name # ここが遅い
@@ -85,12 +85,12 @@ def user_index(name):
     return name
     #pass
 
-# 
-@app.route('/user/<string:name>/<string:kamoku>',methods=['GET'])
-def data(name,kamoku):
-    pass
-
-@app.route('/user/<string:name>/<string:kamoku>',methods=['POST'])
-def updatedata(name,kamoku):
-    pass
-
+@app.route('/test/test1',methods=['GET'])
+def test1():
+    test = db.session.query(Gakusei).filter(Gakusei.id == 12)
+    print(test)
+    print(test.all())
+    print(test.all() == [])
+    #print(len(test))
+    print(len(test.all()))
+    return "true"
