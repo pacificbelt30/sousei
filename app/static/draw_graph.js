@@ -28,6 +28,9 @@ for (i = 0, k = 0, m = 0; i < 15; i++){
                 } else { absent[m]++ }
             } else { l++; }
         }
+        attend[m] = attend[m]/current_list.length;
+        late[m] = late[m]/current_list.length;
+        absent[m] = absent[m]/current_list.length;
         m++;
     } else { k++; }
 }
@@ -115,9 +118,11 @@ for (i = 0, k = 0, m = 0; i < current_list.length; i++){
                 } else { absent[m]++ }
             } else { l++; }
         }
+        attend[m] = attend[m]/current_list.length;
+        late[m] = late[m]/current_list.length;
+        absent[m] = absent[m]/current_list.length;
         m++;
     } else { k++; }
-    console.log(attend)
 }
 }
 function draw_graph() {
@@ -164,7 +169,7 @@ function draw_graph() {
             title:{
                 display: true,
                 fontColor: "#999",
-                text: "授業回数"
+                text: "授業回数",
             },
             stacked: true,
         },
@@ -172,7 +177,7 @@ function draw_graph() {
             title:{
                 display: true,
                 fontColor: "#999",
-                text:"人",
+                text:"出席率",
             },
             stacked: true,
         },
