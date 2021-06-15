@@ -1,0 +1,28 @@
+
+for i in `seq 10`
+do
+curl -X GET -s http://localhost/kamoku/M1  -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/M2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/M3 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/M4 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/T2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/T3_1 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/T3_2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/T4 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/T5 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/W12 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/W3_1 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/W3_2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/W4 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/W5_1 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/W5_2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/Th2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/Th34 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/Th5_1 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/Th5_2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/F1 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/F2 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/F3 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/F4_1 -o /dev/null -w '%{http_code}\n'
+curl -X GET -s http://localhost/kamoku/F4_2 -o /dev/null -w '%{http_code}\n'
+done

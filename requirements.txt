@@ -1,5 +1,6 @@
 flask
 flask-sqlalchemy
+flask-caching
 sqlalchemy
 mysql-connector-python
 DateTime

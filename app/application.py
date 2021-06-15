@@ -4,6 +4,7 @@ flask appの初期化を行い、flask appオブジェクトの実体を持つ
 """
 from flask import Flask, request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy, SessionBase
+from flask_caching import Cache
 from app import env
 
 #from models.database import init_db
@@ -30,4 +31,6 @@ def create_app():
 
 app = create_app()
 db = SQLAlchemy(app)
+cache = Cache(config={"CACHE_TYPE":"simple"})
+cache.init_app(app)
 

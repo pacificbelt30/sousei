@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,url_for
-from app.application import app
+from app.application import app,cache
 from app.models.model import *
-from app.routes import rasp_route
+from app.routes import rasp_route,edit_route
 import time
 
 #from models.database import init_db
 app.register_blueprint(rasp_route.rasp_route)
+app.register_blueprint(edit_route.edit_route)
 
 @app.route('/favicon.ico')
 def favicon():
@@ -36,6 +37,7 @@ def kamoku_all():
     return render_template('user.html',kamoku_data=kamoku_data)
 
 @app.route('/kamoku/<string:kamoku>',methods=['GET'])
+@cache.cached(timeout=30)
 def syusseki_all(kamoku):
     kyoin = request.args.get('kyoin')
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
