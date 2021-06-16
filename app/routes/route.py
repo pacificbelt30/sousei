@@ -5,14 +5,17 @@ from app.models.model import *
 from app.routes import rasp_route,edit_route
 import time
 
+# blueprint登録
 #from models.database import init_db
 app.register_blueprint(rasp_route.rasp_route)
 app.register_blueprint(edit_route.edit_route)
 
+# icon
 @app.route('/favicon.ico')
 def favicon():
     return app.send_static_file("img/favicon.ico")
 
+# 
 @app.route('/',methods=['GET'])
 def hello():
     start = time.time()
@@ -24,18 +27,21 @@ def hello():
     print(time.time()-start)
     return render_template('index.html',data=data)
 
+# testをしたいとき
 @app.route('/test',methods=['GET'])
 def test():
     data = db.session.query(Kamoku).filter(Kamoku.id=='F1').first()
     print(data.timedef.zikan)
     return ''
 
+# 教員ページ
 @app.route('/user',methods=['GET'])
 def kamoku_all():
     kyoin = request.args.get('kyoin')
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
     return render_template('user.html',kamoku_data=kamoku_data)
 
+# 科目の出席データ
 @app.route('/kamoku/<string:kamoku>',methods=['GET'])
 @cache.cached(timeout=30)
 def syusseki_all(kamoku):
@@ -49,6 +55,7 @@ def syusseki_all(kamoku):
     risyudata = db.session.query(Risyu).filter(\
             Risyu.kamoku_id == kamoku\
             ).all()
+    # 0列目学籍番号，1列目学生氏名，2~17列目各回の出席データ
     array = list()
     for i in range(len(risyudata)):
         array.append(list())
@@ -79,18 +86,21 @@ def syusseki_all(kamoku):
     return render_template('syukketu2.html',syusseki_data=sorted(array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('test.html')
 
+# データベース作成
 @app.route('/makedb',methods=['GET'])
 def mkdb():
     from app.makedb import makedb
     makedb()
     return '成功'
 
+# 
 @app.route('/user/<string:name>',methods=['GET'])
 def user_index(name):
     print(name)
     return name
     #pass
 
+# テストしたいとき
 @app.route('/test/test1',methods=['GET'])
 def test1():
     test = db.session.query(Gakusei).filter(Gakusei.id == 12)
@@ -100,3 +110,14 @@ def test1():
     #print(len(test))
     print(len(test.all()))
     return "true"
+
+# 500 Internal Server Error ハンドル
+@app.errorhandler(500)
+def error_500(e):
+    return "内部サーバーエラー"
+
+# 404 Not Found Error ハンドル
+@app.errorhandler(404)
+def error_404(e):
+    return "NOTFOUND"
+

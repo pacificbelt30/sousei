@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import sys
 import app
 if __name__=='__main__':
-    #app.makedb()
-    app.run()
+    if len(sys.argv) >= 2 and sys.argv[1] == '-mb':
+        app.makedb()
+    else: app.run()
 
