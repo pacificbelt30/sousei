@@ -5,6 +5,8 @@ flask appの初期化を行い、flask appオブジェクトの実体を持つ
 from flask import Flask, request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy, SessionBase
 from flask_caching import Cache
+from flask_login import LoginManager
+from datetime import timedelta
 from app import env
 
 #from models.database import init_db
@@ -24,6 +26,9 @@ def create_app():
           'port': env.DB_PORT,
           'db_name': env.DB_NAME
       })
+    app.config["SECRET_KEY"] = env.SECRET_KEY
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=1)
+    #session.permanent = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_POOL_SIZE"] = 3
 
@@ -33,4 +38,13 @@ app = create_app()
 db = SQLAlchemy(app)
 cache = Cache(config={"CACHE_TYPE":"simple"})
 cache.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "auth.login"
 
+from app.models.model import *
+
+@login_manager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return LoginUser.query.get(user_id)

@@ -2,13 +2,14 @@
 from flask import Flask, request,jsonify,render_template,url_for
 from app.application import app,cache
 from app.models.model import *
-from app.routes import rasp_route,edit_route
+from app.routes import rasp_route,edit_route,auth_route
 import time
 
 # blueprint登録
 #from models.database import init_db
 app.register_blueprint(rasp_route.rasp_route)
 app.register_blueprint(edit_route.edit_route)
+app.register_blueprint(auth_route.auth_route)
 
 # icon
 @app.route('/favicon.ico')
@@ -17,7 +18,7 @@ def favicon():
 
 # 
 @app.route('/',methods=['GET'])
-def hello():
+def index():
     start = time.time()
     #from app.makedb import makedb
     #makedb()
@@ -56,34 +57,34 @@ def syusseki_all(kamoku):
             Risyu.kamoku_id == kamoku\
             ).all()
     # 0列目学籍番号，1列目学生氏名，2~17列目各回の出席データ
-    array = list()
+    table_array = list()
     for i in range(len(risyudata)):
-        array.append(list())
+        table_array.append(list())
         for j in range(17):
-            array[i].append('')
-        array[i][0] = risyudata[i].gakusei.number # ここが遅い
-        array[i][1] = risyudata[i].gakusei.name # ここが遅い
-        #array[i][0] = ''
-        #array[i][1] = ''
+            table_array[i].append('')
+        table_array[i][0] = risyudata[i].gakusei.number # ここが遅い
+        table_array[i][1] = risyudata[i].gakusei.name # ここが遅い
+        #table_array[i][0] = ''
+        #table_array[i][1] = ''
     for i in data:
-        for j in range(len(array)):
-            if array[j][1] == i.risyu.gakusei.name:
-                array[j][i.kaisu+1] = i.syukketu # ここが遅い
-                #array[j][i.kaisu+1] = ' '
+        for j in range(len(table_array)):
+            if table_array[j][1] == i.risyu.gakusei.name:
+                table_array[j][i.kaisu+1] = i.syukketu # ここが遅い
+                #table_array[j][i.kaisu+1] = ' '
 
     #for i in range(len(risyudata)):
-        #array.append(list())
-        #array[i][0] = risyudata[i].gakusei.number # ここが遅い
-        #array[i][1] = risyudata[i].gakusei.name # ここが遅い
-    #array2 = list()
+        #table_array.append(list())
+        #table_array[i][0] = risyudata[i].gakusei.number # ここが遅い
+        #table_array[i][1] = risyudata[i].gakusei.name # ここが遅い
+    #table_array2 = list()
     #for i in range(len(data)):
-        #array2.append(list())
-        #array2[i].append(i.risyu.gakusei_id)
-        #array2[i].append(i.syukketu)
-        #array2[i].append(i.kaisu)
+        #table_array2.append(list())
+        #table_array2[i].append(i.risyu.gakusei_id)
+        #table_array2[i].append(i.syukketu)
+        #table_array2[i].append(i.kaisu)
 
-    #return render_template('syukketu.html',syusseki_data=sorted(array,key=lambda x: x[0]),kamoku_data=kamoku_data)
-    return render_template('syukketu2.html',syusseki_data=sorted(array,key=lambda x: x[0]),kamoku_data=kamoku_data)
+    #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
+    return render_template('syukketu2.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('test.html')
 
 # データベース作成

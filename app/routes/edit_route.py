@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request,jsonify,render_template,Blueprint
+from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_for
 #from app.application import app
 from app.models.model import *
 import time
@@ -24,7 +24,7 @@ def edit_get():
         csv.append(kisokudata[i].start_tikoku)
         csv.append(kisokudata[i].end_uketuke)
 
-    return render_template('edit.html',data=kisokudata,csv=csv)
+    return render_template('edit.html',data=kisokudata,csv=csv,kamoku=kamoku)
     #pass
 
 # csvアップロード用
@@ -34,24 +34,21 @@ def edit_get():
 """
 @edit_route.route('/',methods=['POST'])
 def edit_post():
-    csv = request.form["csv"]
     kamoku = request.form["kamoku"]
-    print(csv)
-    print(type(csv))
-    csv = csv.split(',')
-    print(csv)
-    print(type(csv[0]))
+    start_syusseki = request.form["start_syusseki"]
+    start_tikoku = request.form["start_tikoku"]
+    end_uketuke = request.form["end_uketuke"]
     print(kamoku)
     kisokudata = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
-    kisokudata.start_syusseki = csv[0]
-    kisokudata.start_tikoku = csv[1]
-    kisokudata.end_uketuke = csv[2]
+    kisokudata.start_syusseki = start_syusseki
+    kisokudata.start_tikoku = start_tikoku
+    kisokudata.end_uketuke = end_uketuke
     try:
         db.session.commit()
     except:
         db.session.rollback()
         print("error")
-    return render_template('edit.html',data=kisokudata)
-    #pass
+    #return render_template('edit.html',data=kisokudata)
+    return redirect(url_for('edit.edit_get',kamoku=kamoku)) #     #pass
 
 

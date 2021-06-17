@@ -8,32 +8,32 @@ absent = []; // 欠席者数
 
 
 function val_reset_tate(){
-times = []
-attend = []
-late = []
-absent = []
-for (i = 0, k = 0, m = 0; i < 15; i++){ 
-    if (i != filter_times[k] - 1) { // 対応する生徒がフィルタに引っかかってないか
-        times.push(i + 1); // 存在する授業日のラベルを追加
-        attend.push(0); // 出席者の配列に0を追加（インクリメントするため）
-        late.push(0); // 遅刻者の配列に0を追加
-        absent.push(0); // 欠席者の配列に0を追加
-        
-        for (j = 0, l = 0; j < current_list.push(); j++) {
-            if (j != filter_stu[j] - 1){ // 対応する授業日がフィルタに引っかかってないか
-                if (current_list[j][i + 2] == '出席') {
-                    attend[m]++;
-                } else if (current_list[j][i + 2] == '遅刻') {
-                    late[m]++;
-                } else { absent[m]++ }
-            } else { l++; }
-        }
-        attend[m] = attend[m]/current_list.length;
-        late[m] = late[m]/current_list.length;
-        absent[m] = absent[m]/current_list.length;
-        m++;
-    } else { k++; }
-}
+  times = []
+  attend = []
+  late = []
+  absent = []
+  for (i = 0, k = 0, m = 0; i < 15; i++){ 
+      if (i != filter_times[k] - 1) { // 対応する生徒がフィルタに引っかかってないか
+          times.push(i + 1); // 存在する授業日のラベルを追加
+          attend.push(0); // 出席者の配列に0を追加（インクリメントするため）
+          late.push(0); // 遅刻者の配列に0を追加
+          absent.push(0); // 欠席者の配列に0を追加
+          
+          for (j = 0, l = 0; j < syusseki_list.push(); j++) {
+              if (j != filter_stu[j] - 1){ // 対応する授業日がフィルタに引っかかってないか
+                  if (syusseki_list[j][i + 2] == '出席') {
+                      attend[m]++;
+                  } else if (syusseki_list[j][i + 2] == '遅刻') {
+                      late[m]++;
+                  } else { absent[m]++ }
+              } else { l++; }
+          }
+          attend[m] = attend[m]/syusseki_list.length;
+          late[m] = late[m]/syusseki_list.length;
+          absent[m] = absent[m]/syusseki_list.length;
+          m++;
+      } else { k++; }
+  }
 }
 /*
 window.onload = async function () {
@@ -98,32 +98,32 @@ window.onload = async function () {
 */
 
 function val_reset(){
-times = []
-attend = []
-late = []
-absent = []
-for (i = 0, k = 0, m = 0; i < current_list.length; i++){ 
-    if (i != filter_stu[k] - 1){ // 対応する授業日がフィルタに引っかかってないか
-        times.push(current_list[i][1]); // 存在する授業日のラベルを追加
-        attend.push(0); // 出席者の配列に0を追加（インクリメントするため）
-        late.push(0); // 遅刻者の配列に0を追加
-        absent.push(0); // 欠席者の配列に0を追加
-        
-        for (j = 0, l = 0; j < current_list[0].length-2; j++) {
-            if (j != filter_times[j] - 1) { // 対応する生徒がフィルタに引っかかってないか
-                if (current_list[i][j + 2] == '出席') {
-                    attend[m]++;
-                } else if (current_list[i][j + 2] == '遅刻') {
-                    late[m]++;
-                } else { absent[m]++ }
-            } else { l++; }
-        }
-        attend[m] = attend[m]/current_list.length;
-        late[m] = late[m]/current_list.length;
-        absent[m] = absent[m]/current_list.length;
-        m++;
-    } else { k++; }
-}
+  times = []
+  attend = []
+  late = []
+  absent = []
+  for (i = 0, k = 0, m = 0; i < syusseki_list.length; i++){ 
+      if (i != filter_stu[k] - 1){ // 対応する授業日がフィルタに引っかかってないか
+          times.push(syusseki_list[i][1]); // 存在する授業日のラベルを追加
+          attend.push(0); // 出席者の配列に0を追加（インクリメントするため）
+          late.push(0); // 遅刻者の配列に0を追加
+          absent.push(0); // 欠席者の配列に0を追加
+          
+          for (j = 0, l = 0; j < syusseki_list[0].length-2; j++) {
+              if (j != filter_times[j] - 1) { // 対応する生徒がフィルタに引っかかってないか
+                  if (syusseki_list[i][j + 2] == '出席') {
+                      attend[m]++;
+                  } else if (syusseki_list[i][j + 2] == '遅刻') {
+                      late[m]++;
+                  } else { absent[m]++ }
+              } else { l++; }
+          }
+          attend[m] = attend[m]/syusseki_list.length;
+          late[m] = late[m]/syusseki_list.length;
+          absent[m] = absent[m]/syusseki_list.length;
+          m++;
+      } else { k++; }
+  }
 }
 function draw_graph() {
   const myCanvas = document.getElementById("myChart");

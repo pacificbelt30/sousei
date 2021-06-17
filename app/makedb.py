@@ -15,4 +15,5 @@ def makedb():
         Risyu.csv_reg(s.id)
     Syusseki.csv_reg("data/syusseki.csv","F1",1)
     Syusseki.csv_reg("data/syusseki2.csv","F1",3)
+    LoginUser.csv_reg()
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy, SessionBase
 from app.models import csvread
 #from app import env
@@ -13,14 +14,18 @@ from app.application import db
 科目規則データ：KamokuKisoku
 履修データ    ：Risyu
 出席データ    ：Syusseki
+ログインデータ：LoginUser
 """
 
 # 後に教員のログイン用のIDパスワードのテーブルとなるかもしれないやつ
-class User(db.Model):
-    __tablename__ = 'user'
+class LoginUser(UserMixin,db.Model):
+#class LoginUser(db.Model):
+    __tablename__ = 'loginuser'
 
-    id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=True, primary_key=True)
+    id = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False, unique=True, primary_key=True)
     password = db.Column(db.String(256), unique=False)
+    kyoin = db.relationship('Kyoin',lazy='joined')
+
 
     def __init__(self, id, password):
         self.id = id
@@ -28,6 +33,21 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.id
+
+    @staticmethod
+    def csv_reg():
+        import hashlib
+        hash=lambda x:hashlib.sha256(x).hexdigest()
+        kyoin = db.session.query(Kyoin).all()
+        for i in kyoin:
+            print(i.id)
+            db.session.add(LoginUser(i.id,hash(i.id.encode('utf-8'))))
+        try:
+            db.session.commit()
+        except:
+            import traceback
+            traceback.print_exc()
+            db.session.rollback()
 
 
 #学生データ
@@ -60,6 +80,9 @@ class Gakusei(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            db.session.rollback()
+            return False
+        return True
 
     @staticmethod
     def add(id,name,gakunen,number):
@@ -98,6 +121,8 @@ class Kyoin(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
 
 # 講義時間定義
@@ -127,6 +152,8 @@ class Timedef(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
 
 # 科目データ,教員3人登録できる
@@ -173,6 +200,8 @@ class Kamoku(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
 
 # 履修者データ,科目と学生の組み合わせは重複なし
@@ -207,6 +236,8 @@ class Risyu(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
     
 # 科目規則，受付開始時間，遅刻開始時間，終了時間
@@ -244,6 +275,8 @@ class KamokuKisoku(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
 
 # 出席データ
@@ -289,6 +322,8 @@ class Syusseki(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
     @staticmethod
     def csv_reg_nf(json):
@@ -317,6 +352,8 @@ class Syusseki(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
 
 class CRUD:
@@ -341,24 +378,3 @@ class CRUD:
     def delete(model):
         pass
 
-if __name__=='__main__':
-    db.create_all()
-    #データ登録
-    #Gakusei.csv_reg('data/gakuseilist.csv')
-    #Kyoin.csv_reg('data/kyoin.csv')
-    #Timedef.csv_reg()
-    #Kamoku.csv_reg("data/kougikamoku.csv")
-    #KamokuKisoku.csv_reg("data/kougikamoku.csv")
-    #kamokudata = db.session.query(Kamoku).all()
-    #for s in kamokudata:
-        #Risyu.csv_reg(s.id)
-    Syusseki.csv_reg("data/syusseki.csv","F1",1)
-    Syusseki.csv_reg("data/syusseki.csv","F1",2)
-
-    #print(db.session.query(Risyu,Gakusei).join(Risyu,Risyu.gakusei_id==Gakusei.number).filter(Risyu.kamoku_id=="F1").all())
-    #print(db.session.query(Syusseki,Risyu,Gakusei,Kyoin).join(Syusseki,Risyu.id==Syusseki.risyu_id and Risyu.gakusei_id==Gakusei.number and Risyu.kamoku_id==Kamoku.id).filter(Risyu.kamoku_id=="F1").all())
-    print(db.session.query(Syusseki,Risyu,Gakusei,Kamoku).filter(Risyu.id==Syusseki.risyu_id).filter(Risyu.gakusei_id==Gakusei.number).filter(Risyu.kamoku_id==Kamoku.id).filter(Risyu.kamoku_id=="F1").all())
-    
-    #data = db.session.query(Risyu,Kamoku).join(Risyu,Kamoku.id==Risyu.kamoku_id).filter(Kamoku.name=="科目3").first()
-    # data = db.session.query(Risyu,Kamoku).all()
-    #print(data.Kamoku.name)
