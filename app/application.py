@@ -27,7 +27,7 @@ def create_app():
           'db_name': env.DB_NAME
       })
     app.config["SECRET_KEY"] = env.SECRET_KEY
-    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=1)
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=10)
     #session.permanent = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_POOL_SIZE"] = 3
@@ -40,7 +40,7 @@ cache = Cache(config={"CACHE_TYPE":"simple"})
 cache.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "auth.login"
+login_manager.login_view = "auth.login_get"
 
 from app.models.model import *
 

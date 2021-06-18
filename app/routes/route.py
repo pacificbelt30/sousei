@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,url_for
+from flask_login import login_required,current_user
 from app.application import app,cache
 from app.models.model import *
 from app.routes import rasp_route,edit_route,auth_route
@@ -37,9 +38,13 @@ def test():
 
 # 教員ページ
 @app.route('/user',methods=['GET'])
+@login_required
 def kamoku_all():
-    kyoin = request.args.get('kyoin')
+    #kyoin = request.args.get('kyoin')
+    kyoin = current_user.id
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
+    print(current_user.id)
+    print(current_user.kyoin.name)
     return render_template('user.html',kamoku_data=kamoku_data)
 
 # 科目の出席データ

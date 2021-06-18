@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_for
-from flask_login import login_user
+from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_for,session
+from flask_login import login_user, logout_user, login_required
 from app.application import app
 from app.models.model import *
 import time
@@ -40,5 +40,12 @@ def login_post():
         #return "失敗"
     #return render_template('edit.html',data=kisokudata)
     #return "成功"
+    session.permanent = True
     login_user(user,remember=remember)
-    return redirect(url_for('index',kyoin=user.id))
+    return redirect(url_for('kamoku_all'))
+
+@auth_route.route('/logout',methods=['GET'])
+@login_required
+def logout_get():
+    logout_user()
+    return redirect(url_for('auth.login_get'))
