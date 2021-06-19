@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+html{
+    font-family: sans-serif;
+}
+
+html * {
+    box-sizing: border-box;
+}
+
+.title{
+    font-size: 2em;/* フォントサイズ */
+    font-weight: bold;/* フォント太さ */
+    padding-top: .5em;
+    padding-right: 300px;
+    padding-bottom: .5em;
+    padding-left: .5em;
+    margin-bottom: 2em;
+    margin-left: 10px;
+    background-color: #ebf4f6;/* 背景色 */
+    border-left: 5px solid #318496;/* 左の線 */
+    border-bottom: 2px solid #cccccc;/* 下の線 */
+    color: #333333;/* フォント色 */
+}
+
+.title a:link {
+    color: #333333;
+    text-decoration: none;
+}
+
+.title a:visited { 
+    color: #333333;
+    text-decoration: none;
+}
+
+.title a:hover {
+    color: #333333;
+    text-decoration: none;
+}
+
+.title a:active {
+    color: #333333;
+    text-decoration: none;
+}
+
+body{
+    margin: 0 0 0 0;
+    background-color: #EEFFFF;
+}
+
+main {
+    padding: 10px;
+    border:1px solid #225588;
+}
+
+.wrapper{
+    margin: 0 auto 0 auto;
+    max-width: 960px;
+}
+
+#output{
+    font-size: 20px;
+    color: firebrick;
+}
+
+.download {
+    background-color: #7dbe28;
+    color: #fff;
+}
+
+.download::before{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+
+  
+  

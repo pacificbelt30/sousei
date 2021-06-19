@@ -50,7 +50,7 @@ def test():
 # 教員ページ
 @app.route('/user',methods=['GET'])
 @login_required
-@cache.cached(timeout=60)
+#@cache.cached(timeout=60)
 def kamoku_all():
     #kyoin = request.args.get('kyoin')
     kyoin = current_user.id
@@ -58,7 +58,8 @@ def kamoku_all():
     print('userid:',current_user.id)
     print('username:',current_user.kyoin.name)
     #print('username:',kamoku_data[0].kyoin.name)
-    return render_template('user.html',kamoku_data=kamoku_data)
+    #return render_template('user.html',kamoku_data=kamoku_data)
+    return render_template('select.html',kamoku_data=kamoku_data)
 
 # 科目の出席データ
 @app.route('/kamoku/<string:kamoku>',methods=['GET'])
