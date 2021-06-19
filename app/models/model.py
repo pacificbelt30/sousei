@@ -55,13 +55,17 @@ class Gakusei(db.Model):
     __tablename__ = 'gakusei'
 
     id = db.Column(db.String(20),nullable=False, unique=True, primary_key=True) # IDm
-    name = db.Column(db.String(80),nullable=False, unique=False)
+    name = db.Column(db.String(40),nullable=False, unique=False)
+    kana = db.Column(db.String(40),nullable=False, unique=False)
+    seibetu = db.Column(db.String(10),nullable=False, unique=False)
     gakunen = db.Column(db.Integer,nullable=False,unique=False)
-    number = db.Column(db.String(120),nullable=False,unique=True) # 学籍番号
+    number = db.Column(db.String(20),nullable=False,unique=True) # 学籍番号
 
-    def __init__(self, id, name, gakunen, number):
+    def __init__(self, id, name, kana, seibetu, gakunen, number):
         self.id = id
         self.name = name
+        self.kana = kana
+        self.seibetu = seibetu
         self.gakunen = gakunen
         self.number = number
 
@@ -72,7 +76,7 @@ class Gakusei(db.Model):
     @staticmethod
     def csv_reg(filename):
         data = csvread.csv_reader(filename)
-        dbdata = [Gakusei(s[4],s[1],0,s[0]) for s in data]
+        dbdata = [Gakusei(s[4],s[1],s[2],s[3],0,s[0]) for s in data]
         try:
             db.session.add_all(dbdata)
             db.session.commit()
@@ -100,11 +104,15 @@ class Kyoin(db.Model):
 
     #id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=True, primary_key=True)
     id = db.Column(db.String(20),nullable=False, unique=True, primary_key=True)
-    name = db.Column(db.String(20),nullable=False, unique=False)
+    name = db.Column(db.String(40),nullable=False, unique=False)
+    kana = db.Column(db.String(40),nullable=False, unique=False)
+    seibetu = db.Column(db.String(10),nullable=False, unique=False)
 
-    def __init__(self, id, name):
+    def __init__(self, id, name, kana, seibetu):
         self.id = id
         self.name = name
+        self.kana = kana
+        self.seibetu = seibetu
 
     def __repr__(self):
         return '<Kyoin %s>' % self.id
@@ -113,7 +121,7 @@ class Kyoin(db.Model):
     @staticmethod
     def csv_reg(filename):
         data = csvread.csv_reader(filename)
-        dbdata = [Kyoin(s[0],s[1]) for s in data]
+        dbdata = [Kyoin(s[0],s[1],s[2],s[3]) for s in data]
         try:
             db.session.add_all(dbdata)
             db.session.commit()
@@ -131,7 +139,7 @@ class Timedef(db.Model):
 
     id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=True,primary_key=True) # 
     zigen = db.Column(db.Integer,nullable=False, unique=True) # 
-    zikan = db.Column(db.String(80),nullable=False, unique=True) # 
+    zikan = db.Column(db.String(20),nullable=False, unique=True) # 
 
     def __init__(self, zigen, zikan):
         #self.id = id
@@ -162,11 +170,11 @@ class Kamoku(db.Model):
 
     #id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=True, primary_key=True)
     id = db.Column(db.String(20),nullable=False, unique=True, primary_key=True)
-    name = db.Column(db.String(80),nullable=False, unique=False)
+    name = db.Column(db.String(40),nullable=False, unique=False)
     timedef_id = db.Column(db.Integer,db.ForeignKey('timedef.id'),nullable=False,unique=False)
-    room = db.Column(db.String(120),nullable=False,unique=False)
+    room = db.Column(db.String(20),nullable=False,unique=False)
     youbi = db.Column(db.String(10),nullable=False,unique=False)
-    kyoin_id1 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
+    kyoin_id1 = db.Column(db.String(40),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
     #kyoin_id2 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
     #kyoin_id3 = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False,unique=False)
     timedef = db.relationship("Timedef")

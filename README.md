@@ -87,7 +87,15 @@ python run.py
 ```
 ブラウザで [http://localhost:5000](http://localhost:5000) に接続
 
+データベースにデータを入れるために
+あらかじめsousei_dbという名前のデータベースを作成し，
 http://localhost/makedb にアクセスすればdatabaseが作成される．
+
+or
+```sh
+    python run.py -mb
+```
+作り直すためにはdropしてください．
 
 # 必要なもの
 - data/  
@@ -105,6 +113,7 @@ sousei/以下にdataディレクトリを作成し，各種データをcsvファ
 - 非同期
 - ラズパイとWEBページのUI
 - 例外処理(sqlalchemy.exc.IntegrityError)
+- モデル再考 -> 性別やよみがなを追加した．
 - グラフのフォーマット
     - 出席率・遅刻率・の折れ線グラフまたは層になってる棒グラフ
     - 個人の棒グラフ

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_for,session
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required,current_user
 from app.application import app
 from app.models.model import *
 import time
@@ -14,13 +14,15 @@ auth_route = Blueprint('auth', __name__, url_prefix='/auth')
 """
 @auth_route.route('/',methods=['GET'])
 def login_get():
-
+    if current_user.is_authenticated:
+        return redirect(url_for('kamoku_all'))
     return render_template('login.html')
     #pass
 
 # 
 #/auth からアクセスできる
 """
+POST
 """
 @auth_route.route('/',methods=['POST'])
 def login_post():
@@ -34,7 +36,7 @@ def login_post():
     user = db.session.query(LoginUser).filter(LoginUser.id == id,LoginUser.password == password).first()
     print('id:',id)
     print('pass:',password)
-    print(user is None)
+    print('ログイン判定:',user is None)
     if user is None:
         return redirect(url_for('auth.login_get'))
         #return "失敗"
@@ -47,5 +49,7 @@ def login_post():
 @auth_route.route('/logout',methods=['GET'])
 @login_required
 def logout_get():
+    print('logout:',current_user.kyoin.name)
     logout_user()
     return redirect(url_for('auth.login_get'))
+

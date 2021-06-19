@@ -6,6 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='draw_graph.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='csvdownload.js') }}"></script>
 <style type="text/css">
 #sidebar {
   width: 200px;
@@ -23,7 +24,7 @@
 <div id="sidebar">
     <ul class="side">
     {%for i in kamoku_data%}
-    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name}}</a></li>
+    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name+"("+i.id+")"+i.youbi}}</a></li>
     {%endfor%}
     </ul>
 </div>
@@ -37,16 +38,25 @@ td{
 <table id="table" border="1">
 
 </table>
+<button id="dwnbtn" onclick="download(arrToCSV(join_head_body()),'{{kamoku}}.csv')">csvダウンロード</button>
 <div>
-<button id="dwnbtn" onclick="graph_download()">ダウンロード</button>
+    <button id="dwnbtn" onclick="graph_download('{{kamoku}}.png')">ダウンロード</button>
 <canvas id="myChart" height=300 width=500></canvas>
 <script type="text/javascript">
+table_header = {{table_header|safe}}
 syusseki_list = {{syusseki_data|safe}}
 console.log(syusseki_list)
 let table = document.getElementById('table')
 let rows=[];
+row = table.createTHead().insertRow(-1);
+for(i=0;i<table_header.length;i++){
+    cell = row.insertCell(-1);
+    cell.appendChild(document.createTextNode(table_header[i]));
+}
+
+tbody = table.createTBody();
 for(i=0;i<syusseki_list.length;i++){
-    rows.push(table.insertRow(-1));
+    rows.push(tbody.insertRow(-1));
     for(j=0;j<syusseki_list[i].length;j++){
         cell = rows[i].insertCell(-1);
         cell.appendChild(document.createTextNode(syusseki_list[i][j]));

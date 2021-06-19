@@ -14,7 +14,7 @@
 <div id="sidebar">
     <ul class="side">
     {%for i in kamoku_data%}
-    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name}}</a></li>
+    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name+"("+i.id+")"+i.youbi}}</a></li>
     {%endfor%}
     </ul>
 </div>

@@ -188,11 +188,11 @@ function draw_graph() {
   //await _sleep(2000);
 }
 
-function graph_download(){
+function graph_download(filename){
     let myCanvas = document.getElementById("myChart");
     let link = document.createElement("a");
     link.href = myCanvas.toDataURL("image/png");
-    link.download = "graph.png";
+    link.download = filename;
     link.click();
 }
 
