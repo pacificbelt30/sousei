@@ -1,8 +1,12 @@
 # sousei
 # ルーティング
-- /
-- /home
-- /
+- / /userにリダイレクト
+- /user 講義選択ページ？
+- /kamoku/{kamoku_id} kamoku_idは変数，kamoku_idの示す科目の出欠リストを表とグラフで表示するページ
+- /edit 科目規則編集ページ
+- /auth ログインページ
+- /auth/logout ログアウトページ，ログインページにリダイレクト
+- /auth/chpass パスワード変更ページ
 - /csv
 
 # ディレクトリ構成
