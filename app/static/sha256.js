@@ -8,7 +8,7 @@
 const algo = "SHA-256";
 
 // input data:
-const str = "P011";
+const str = "この文字列をハッシュ化します";
 
 async function digestMessage(message) {
   const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
