@@ -11,6 +11,7 @@ auth_route = Blueprint('auth', __name__, url_prefix='/auth')
 # ログイン画面
 #/auth からアクセスできる
 """
+GET
 """
 @auth_route.route('/',methods=['GET'])
 def login_get():
@@ -73,4 +74,21 @@ def chpass_post():
         db.session.rollback()
         print('PASSWORD_CHANGE_ERROR','id:',current_user.id)
     return redirect(url_for('kamoku_all'))
+
+# パスワード変更
+@auth_route.route('/resetpassword',methods=['POST'])
+@login_required
+def resetpassword_post():
+    import hashlib
+    hash=lambda x:hashlib.sha256(x).hexdigest()
+
+    current_user.password = hash(current_user.id)
+    try:
+        db.session.commit()
+        print('RESET_PASSWORD_SUCCESS','id:',current_user.id)
+    except:
+        db.session.rollback()
+        print('RESET_PASSWORD_ERROR','id:',current_user.id)
+    logout_user()
+    return redirect(url_for('login'))
 

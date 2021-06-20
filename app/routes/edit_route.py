@@ -47,7 +47,7 @@ def edit_post():
         db.session.commit()
     except:
         db.session.rollback()
-        print("error")
+        print("TIME_EDIT_ERROR")
     #return render_template('edit.html',data=kisokudata)
     return redirect(url_for('edit.edit_get',kamoku=kamoku)) #     #pass
 

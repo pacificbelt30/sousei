@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='draw_graph.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='csvdownload.js') }}"></script>
+<style type="text/css">
+#sidebar {
+  width: 200px;
+  float: left;
+}
+#contents {
+  width: 1000px;
+  float: right;
+  padding: 0 15px;
+}
+</style>
+</head>
+<body>
+<div>
+<div id="sidebar">
+    <ul class="side">
+    {%for i in kamoku_data%}
+    <li><a href="/kamoku/{{i.id}}?kyoin={{i.kyoin.id}}">{{i.name+"("+i.id+")"+i.youbi}}</a></li>
+    {%endfor%}
+    </ul>
+</div>
+</div>
+<div id="contents">
+<style type="text/css">
+td{
+    width:60px;
+}
+</style>
+<table id="table" border="1">
+
+</table>
+<button id="dwnbtn" onclick="download(arrToCSV(join_head_body()),'{{kamoku}}.csv')">csvダウンロード</button>
+<div>
+    <button id="dwnbtn" onclick="graph_download('{{kamoku}}.png')">ダウンロード</button>
+<canvas id="myChart" height=300 width=500></canvas>
+<script type="text/javascript">
+table_header = {{table_header|safe}}
+syusseki_list = [];
+risyu_list = {{risyu_list|safe}};
+tmplist = {{syusseki_data|safe}};
+for(i=0;i<risyu_list.length;i++){
+    syusseki_list.push([]);
+    syusseki_list[i].push(risyu_list[i][0]);
+    syusseki_list[i].push(risyu_list[i][1]);
+    for(j=0;j<15;j++){
+        syusseki_list[i].push('');
+    }
+}
+for(i=0;i<tmplist.length;i++){
+    for(j=0;j<syusseki_list.length;j++){
+        if(tmplist[i][0]==syusseki_list[j][1]){
+            syusseki_list[j][tmplist[i][2]+1] = tmplist[i][1];
+            break;
+        }
+    }
+}
+//syusseki_list = risyu_list;
+console.log(syusseki_list)
+let table = document.getElementById('table')
+let rows=[];
+row = table.createTHead().insertRow(-1);
+for(i=0;i<table_header.length;i++){
+    cell = row.insertCell(-1);
+    cell.appendChild(document.createTextNode(table_header[i]));
+}
+
+tbody = table.createTBody();
+for(i=0;i<syusseki_list.length;i++){
+    rows.push(tbody.insertRow(-1));
+    for(j=0;j<syusseki_list[i].length;j++){
+        cell = rows[i].insertCell(-1);
+        cell.appendChild(document.createTextNode(syusseki_list[i][j]));
+    }
+}
+</script>
+</div>
+</div>
+</body>
+</html>

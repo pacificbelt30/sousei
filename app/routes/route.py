@@ -98,6 +98,7 @@ def syusseki_all(kamoku):
             if table_array[j][1] == i.risyu.gakusei.name:
                 table_array[j][i.kaisu+1] = i.syukketu # ここが遅い
                 #table_array[j][i.kaisu+1] = ' '
+                break
 
     #for i in range(len(risyudata)):
         #table_array.append(list())
@@ -112,13 +113,12 @@ def syusseki_all(kamoku):
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)
-    #return render_template('test.html')
 
 # 科目の出席データ ベンチ用ページ
 @app.route('/bench/<string:kamoku>',methods=['GET'])
-@cache.cached(timeout=30)
+#@cache.cached(timeout=30)
 def bench_syusseki(kamoku):
-    kyoin = request.args.get('kyoin')
+    kyoin = 'P011'
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
     data = db.session.query(Syusseki).join(Risyu).filter(\
             Risyu.kamoku_id==kamoku\
@@ -132,19 +132,48 @@ def bench_syusseki(kamoku):
     table_header = ['学籍番号','氏名','第1回','第2回','第3回','第4回','第5回','第6回',\
             '第7回','第8回','第9回','第10回','第11回','第12回','第13回','第14回','第15回']
     table_array = list()
-    for i in range(len(risyudata)):
-        table_array.append(list())
-        for j in range(17):
-            table_array[i].append('')
-        table_array[i][0] = risyudata[i].gakusei.number # ここが遅い
-        table_array[i][1] = risyudata[i].gakusei.name # ここが遅い
+    #for i in range(len(risyudata)):
+        #table_array.append(list())
+        #for j in range(17):
+            #table_array[i].append('')
+        #table_array[i][0] = risyudata[i].gakusei.number # ここが遅い
+        #table_array[i][1] = risyudata[i].gakusei.name # ここが遅い
         #table_array[i][0] = ''
         #table_array[i][1] = ''
-    for i in data:
-        for j in range(len(table_array)):
-            if table_array[j][1] == i.risyu.gakusei.name:
-                table_array[j][i.kaisu+1] = i.syukketu # ここが遅い
+    for i in range(len(risyudata)):
+        table_array.append(list())
+        table_array[i].append(risyudata[i].gakusei.number)
+        table_array[i].append(risyudata[i].gakusei.name)
+    #print(table_array)
+    count = 0
+    #for i in data:
+        #for j in range(len(table_array)):
+            #count = count + 1
+            #if table_array[j][1] == i.risyu.gakusei.name:
+                #table_array[j][i.kaisu+1] = i.syukketu # ここが遅い
+                #break;
                 #table_array[j][i.kaisu+1] = ' '
+    table = list()
+    for i in range(len(data)):
+    #for i in range(1500):
+        table.append([])
+        table[i].append(data[i].risyu.gakusei.name)
+        table[i].append(data[i].syukketu)
+        table[i].append(data[i].kaisu)
+        count = count + 1
+    #print(table)
+    #for i in range(41):
+        #for j in range(100):
+            #count = count + 1
+            #if 'aeo' == 'aeo':
+                #pass
+    #for i in range(15*100):
+        #for j in range(100):
+            #count = count + 1
+            #if table_array[0][1] == data[0].risyu.gakusei.name:
+                #pass
+
+    print('繰り返し回数：',count)
 
     #for i in range(len(risyudata)):
         #table_array.append(list())
@@ -158,7 +187,8 @@ def bench_syusseki(kamoku):
         #table_array2[i].append(i.kaisu)
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
-    return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
+    #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
+    return render_template('syukketu3.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=table_array,kamoku_data=kamoku_data)
     #return render_template('test.html')
 
 # データベース作成
