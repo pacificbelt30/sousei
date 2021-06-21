@@ -4,6 +4,7 @@ flask appの初期化を行い、flask appオブジェクトの実体を持つ
 """
 from flask import Flask, request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy, SessionBase
+from flask_marshmallow import Marshmallow
 from flask_caching import Cache
 from flask_login import LoginManager
 from datetime import timedelta
@@ -36,6 +37,7 @@ def create_app():
 
 app = create_app()
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 cache = Cache(config={"CACHE_TYPE":"simple"})
 cache.init_app(app)
 login_manager = LoginManager()

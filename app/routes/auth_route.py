@@ -3,6 +3,7 @@ from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_
 from flask_login import login_user, logout_user, login_required,current_user
 from app.application import app
 from app.models.model import *
+from app.models.schema import *
 import time
 
 # /csv をルートとして見る
@@ -10,9 +11,7 @@ auth_route = Blueprint('auth', __name__, url_prefix='/auth')
 
 # ログイン画面
 #/auth からアクセスできる
-"""
-GET
-"""
+# ログインしている場合は/user にリダイレクト
 @auth_route.route('/',methods=['GET'])
 def login_get():
     if current_user.is_authenticated:
@@ -22,8 +21,10 @@ def login_get():
 
 # 
 #/auth からアクセスできる
+# 認証成功後/user にリダイレクト
 """
-POST
+id：教員ID
+password：SHA256でハッシュ化されたpassword文字列
 """
 @auth_route.route('/',methods=['POST'])
 def login_post():
@@ -75,7 +76,8 @@ def chpass_post():
         print('PASSWORD_CHANGE_ERROR','id:',current_user.id)
     return redirect(url_for('kamoku_all'))
 
-# パスワード変更
+# パスワードリセット
+# デフォルトのパスワードは教員IDと同じ
 @auth_route.route('/resetpassword',methods=['POST'])
 @login_required
 def resetpassword_post():

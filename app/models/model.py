@@ -2,9 +2,10 @@
 from flask import Flask
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy, SessionBase
+from flask_marshmallow.fields import fields
 from app.models import csvread
 #from app import env
-from app.application import db
+from app.application import db,ma
 """
 データベーステーブル定義
 学生データ    ：Gakusei
@@ -26,7 +27,6 @@ class LoginUser(UserMixin,db.Model):
     id = db.Column(db.String(20),db.ForeignKey('kyoin.id'),nullable=False, unique=True, primary_key=True)
     password = db.Column(db.String(256), unique=False)
     kyoin = db.relationship('Kyoin',lazy='joined')
-
 
     def __init__(self, id, password):
         self.id = id
@@ -248,6 +248,13 @@ class Risyu(db.Model):
             return False
         return True
 
+
+#class RisyuScheme(ma.SQLAlchemyAutoSchema):
+    #class Meta:
+        #model = Risyu
+        #load_instance = True
+        #include_relationships = True
+
     
 # 科目規則，受付開始時間，遅刻開始時間，終了時間
 class KamokuKisoku(db.Model):
@@ -258,6 +265,8 @@ class KamokuKisoku(db.Model):
     start_syusseki = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
     start_tikoku = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
     end_uketuke = db.Column(db.Integer,nullable=False, unique=False) # 受付終了時間（相対時間）
+    #end_syusseki = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
+    #end_tikoku = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
     #kamoku = db.relationship('Kamoku',uselist=False,backref='kamokukisoku')
     #kamoku = db.relationship('Kamoku')
 
@@ -366,21 +375,24 @@ class Syusseki(db.Model):
 
 
 # 講義回数データ
-# 各科目の講義の何回目が行われたかがわかる
+# 各科目の講義の何回目が何日に行われたかがわかる
 class Kougikaisu(db.Model):
     __tablename__ = 'kougikaisu'
 
     id = db.Column(db.Integer,db.ForeignKey('risyu_id'),nullable=False, primary_key=True) # 
     #risyu_id = db.Column(db.Integer,db.ForeignKey('risyu.id'),nullable=False, unique=False) # 
     kaisu = db.Column(db.Integer,nullable=False, unique=False) # 回数
+    date = db.Column(db.String(20),nullable=False, unique=False) # 回数
 
-    def __init__(self,id,kaisu):
+    def __init__(self,id,kaisu,date):
         self.id = id
         self.kaisu = kaisu
+        self.date = date
 
     def __repr__(self):
         return '<Syusseki %r>' % self.id
         #pass
+
 
 class CRUD:
     @staticmethod
