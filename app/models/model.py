@@ -15,6 +15,7 @@ from app.application import db
 履修データ    ：Risyu
 出席データ    ：Syusseki
 ログインデータ：LoginUser
+講義回数データ：kougikaisu
 """
 
 # 後に教員のログイン用のIDパスワードのテーブルとなるかもしれないやつ
@@ -363,6 +364,23 @@ class Syusseki(db.Model):
             return False
         return True
 
+
+# 講義回数データ
+# 各科目の講義の何回目が行われたかがわかる
+class Kougikaisu(db.Model):
+    __tablename__ = 'kougikaisu'
+
+    id = db.Column(db.Integer,db.ForeignKey('risyu_id'),nullable=False, primary_key=True) # 
+    #risyu_id = db.Column(db.Integer,db.ForeignKey('risyu.id'),nullable=False, unique=False) # 
+    kaisu = db.Column(db.Integer,nullable=False, unique=False) # 回数
+
+    def __init__(self,id,kaisu):
+        self.id = id
+        self.kaisu = kaisu
+
+    def __repr__(self):
+        return '<Syusseki %r>' % self.id
+        #pass
 
 class CRUD:
     @staticmethod
