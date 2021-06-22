@@ -49,8 +49,10 @@ risyu_list = {{risyu_list|safe}};
 tmplist = {{syusseki_data|safe}};
 for(i=0;i<risyu_list.length;i++){
     syusseki_list.push([]);
-    syusseki_list[i].push(risyu_list[i][0]);
-    syusseki_list[i].push(risyu_list[i][1]);
+    //syusseki_list[i].push(risyu_list[i][0]);
+    //syusseki_list[i].push(risyu_list[i][1]);
+    syusseki_list[i].push(risyu_list[i].number);
+    syusseki_list[i].push(risyu_list[i].name);
     for(j=0;j<15;j++){
         syusseki_list[i].push('');
     }

@@ -84,7 +84,10 @@ def syusseki_all(kamoku):
             Kamoku.id == Risyu.kamoku_id,\
             Kamoku.kyoin_id1 == kyoin\
             ).all()
-    print('syusssekischema',RisyuSchema(many=True).dump(risyudata))
+    risyujson = RisyuSchema(many=True).dump(risyudata)
+    print(type(risyudata))
+    risyujson = [ s['gakusei'] for s in risyujson ]
+    print('syusssekischema',risyujson)
     print(data)
     #print(risyudata)
     if risyudata == []:
@@ -106,6 +109,7 @@ def syusseki_all(kamoku):
         table[i].append(data[i].risyu.gakusei.name)
         table[i].append(data[i].syukketu)
         table[i].append(data[i].kaisu)
+    table_array = risyujson
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)

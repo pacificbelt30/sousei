@@ -61,8 +61,7 @@ class RisyuSchema(ma.SQLAlchemyAutoSchema):
         load_instance = True
         include_fk = True
         include_relationships = True
-    #gakusei = fields.Nested(GakuseiSchema)
-    name = fields.Pluck(GakuseiSchema,'name')
+    gakusei = fields.Nested(GakuseiSchema)
     #kana = fields.Pluck(GakuseiSchema,'kana')
     #number = fields.Pluck(GakuseiSchema,'number')
 
