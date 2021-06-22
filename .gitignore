@@ -1,6 +1,7 @@
 csstemp/
 env.py
 data/
+test/
 *.csv
 # Byte-compiled / optimized / DLL files
 __pycache__/
