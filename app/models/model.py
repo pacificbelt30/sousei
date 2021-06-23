@@ -376,13 +376,13 @@ class Syusseki(db.Model):
 
 # 講義回数データ
 # 各科目の講義の何回目が何日に行われたかがわかる
-class Kougikaisu(db.Model):
-    __tablename__ = 'kougikaisu'
+class Lectured(db.Model):
+    __tablename__ = 'lectured'
 
-    id = db.Column(db.Integer,db.ForeignKey('risyu_id'),nullable=False, primary_key=True) # 
-    #risyu_id = db.Column(db.Integer,db.ForeignKey('risyu.id'),nullable=False, unique=False) # 
-    kaisu = db.Column(db.Integer,nullable=False, unique=False) # 回数
-    date = db.Column(db.String(20),nullable=False, unique=False) # 回数
+    id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=True, primary_key=True)
+    kaisu = db.Column(db.Integer,nullable=False, unique=False)
+    date = db.Column(db.String(20),nullable=False, unique=False)
+    kamoku = db.relationship('Kamoku',lazy='joined')
 
     def __init__(self,id,kaisu,date):
         self.id = id
@@ -390,9 +390,8 @@ class Kougikaisu(db.Model):
         self.date = date
 
     def __repr__(self):
-        return '<Syusseki %r>' % self.id
+        return '<Lectured %r>' % self.id
         #pass
-
 
 class CRUD:
     @staticmethod

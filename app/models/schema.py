@@ -84,7 +84,7 @@ class SyussekiSchema(ma.SQLAlchemyAutoSchema):
 
 class KougiKaisuSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = Kougikaisu
+        model = Lectured
         load_instance = True
         include_fk = True
         include_relationships = True
