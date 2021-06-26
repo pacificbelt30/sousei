@@ -322,19 +322,29 @@ class Syusseki(db.Model):
     @staticmethod
     def csv_reg(filename,kamoku,kaisu):
         import time
+        import datetime
         data = csvread.csv_reader(filename)
         dbdata = list()
         for s in data:
             try:
-                risyu = db.session.query(Risyu).filter(s[0]==Risyu.gakusei_id,kamoku == Risyu.kamoku_id).first().id
-                dbdata.append(Syusseki(risyu,s[1],kaisu,time.time()))
+                risyu = db.session.query(Risyu).filter(s[0]==Risyu.gakusei_id,kamoku == Risyu.kamoku_id).first()
+                dbdata.append(Syusseki(risyu.id,s[1],kaisu,time.time()))
             except:
                 import traceback
                 traceback.print_exc()
                 db.session.rollback()
         #dbdata = [Syusseki(,s[0]) for s in data]
         try:
+            risyu = db.session.query(Risyu).filter(s[0]==Risyu.gakusei_id,kamoku == Risyu.kamoku_id).first()
+        except:
+                import traceback
+                traceback.print_exc()
+                db.session.rollback()
+        dbdata_k = (Lectured(risyu.kamoku_id,kaisu,str(datetime.date.today())))
+        try:
             db.session.add_all(dbdata)
+            db.session.commit()
+            db.session.add(dbdata_k)
             db.session.commit()
         except:
             import traceback
@@ -344,48 +354,77 @@ class Syusseki(db.Model):
         return True
 
     @staticmethod
-    def csv_reg_nf(json):
+    def csv_reg_nf(json_data):
         import time
-        data = json["csv"].splitlines()
-        print(data)
-        data = [s.split(',') for s in data]
-        print(data)
+        import datetime
+        #data = json["csv"].splitlines()
+        #print(data)
+        #data = [s.split(',') for s in data]
+        #print(data)
+        # data = json.dumps(json_data["data"])
+        # print(type(data))
+        
+        data=list()
+        s_data=list()
+        for i in range(len(json_data['csv'])):
+            data.append(json_data['csv'][i]['number'])
+            s_data.append(json_data['csv'][i]['shusseki'])
+
         dbdata = list()
-        for s in data:
+        dbdata_k = list()
+        for s in range(len(data)):
             try:
+                print(data[s])
+                #print(type(data[s]))
+                # print(json_data["kamoku"])
+                
                 risyu = db.session.query(Risyu).filter(\
-                        s[0]==Risyu.gakusei_id,\
-                        json["kamoku"] == Risyu.kamoku_id\
+                        data[s]==Risyu.gakusei_id,\
+                        json_data["kamoku"] == Risyu.kamoku_id\
                         ).first().id
-                dbdata.append(Syusseki(risyu,s[1],json["kaisu"],time.time()))
+                print(risyu)
+                if db.session.query(Syusseki).filter(risyu==Syusseki.risyu_id,json_data["kaisu"]==Syusseki.kaisu).first() is None:
+                    dbdata.append(Syusseki(risyu,s_data[s],json_data["kaisu"],time.time()))
+                else:
+                    print("該当の出席データはすでに入力されています 学籍番号："+str(data[s])+" 科目："+str(json_data["kamoku"]))
             except:
                 import traceback
                 traceback.print_exc()
                 db.session.rollback()
+        try:
+            if db.session.query(Lectured).filter(json_data["kamoku"] == Lectured.id, json_data["kaisu"] == Lectured.kaisu).first() is None:
+                date_today = str(datetime.date.today().month)+"/"+str(datetime.date.today().day) # 例2/29
+                dbdata_k = (Lectured(json_data["kamoku"],json_data["kaisu"],str(datetime.date.today()))) # 日付のみが欲しい場合はdate_todayに変更
+        except:
+            import traceback
+            traceback.print_exc()
+            db.session.rollback()
+
         #dbdata = [Syusseki(,s[0]) for s in data]
         try:
             db.session.add_all(dbdata)
+            db.session.commit()
+            db.session.add(dbdata_k)
             db.session.commit()
         except:
             import traceback
             traceback.print_exc()
             db.session.rollback()
-            return False
-        return True
-
 
 # 講義回数データ
 # 各科目の講義の何回目が何日に行われたかがわかる
 class Lectured(db.Model):
     __tablename__ = 'lectured'
+    __table_args__  =  ( db.UniqueConstraint ( 'kamoku_id' , 'kaisu' ),{}) 
 
-    id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=True, primary_key=True)
+    id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=False, primary_key=True)
+    kamoku_id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=False)
     kaisu = db.Column(db.Integer,nullable=False, unique=False)
-    date = db.Column(db.String(20),nullable=False, unique=False)
+    date = db.Column(db.String(30),nullable=False, unique=False)
     kamoku = db.relationship('Kamoku',lazy='joined')
 
     def __init__(self,id,kaisu,date):
-        self.id = id
+        self.kamoku_id = id
         self.kaisu = kaisu
         self.date = date
 
