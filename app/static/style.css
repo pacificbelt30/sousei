@@ -63,19 +63,79 @@ main {
     color: firebrick;
 }
 
-.download {
-    background-color: #7dbe28;
-    color: #fff;
+.tabwrap{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0;
 }
 
-.download::before{
-    display: inline-block;
-    width: 30px;
-    height: 30px;
+.tabwrap:after {
+    content: '';
+    width: 100%;
+    height: 3px;
+    background: DeepSkyBlue;
+    display: block;
+    order: -1;
+}
+
+.tablabel {
+    color: white;
+    background-color: lightgray;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    white-space: nowrap;
+    text-align: center;
+    padding: 10px .5em;
+    order: -1;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    flex: 1;
+ }
+
+ .tablabel:not(:last-of-type) {
     margin-right: 5px;
-    vertical-align: middle;
+  }
+
+ .tabbody {
+     width: 100%;
+     height: 0;
+     overflow: hidden;
+     opacity: o;
+ }
+
+ .tabswitch:checked+.tablabel{
+     background-color: 	#75A9FF;
+ }
+
+ .tabswitch:checked+.tablabel+.tabbody{
+    height: auto;
+    overflow: auto;
+    padding: 15px;
+    opacity: 1;
+    transition: .5s opacity;
+    box-shadow: 0 0 3px rgba(0,0,0,.2);
+ }
+
+ .tabswitch{
+     display: none;
+ }
+
+ .cap{
+     caption-side: top;
+ }
+
+.download{
+color:#fff;
+text-align:center;
+padding:5px;
+margin-top:15px;
+background-color:#126df4;
+border-radius: 50px;
+box-shadow:0px 2px 2px #999;
+}  
+
+.time{
+    text-align: center;
 }
-
-
-  
-  

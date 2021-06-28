@@ -23,11 +23,11 @@ def edit_get():
     print(kamoku,type(kamoku))
     #json = request.get_json()
     kisokudata = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
-    print({'status':'ok','kisoku':KamokuKisokuScheme().dump(kisokudata)})
+    print({'status':'ok','kisoku':KamokuKisokuSchema().dump(kisokudata)})
     test = db.session.query(KamokuKisoku).all()
-    print({'status':'ok','kisoku':KamokuKisokuScheme(many=True).dump(test)})
+    print({'status':'ok','kisoku':KamokuKisokuSchema(many=True).dump(test)})
 
-    return render_template('edit.html',data=kisokudata,kisoku=KamokuKisokuScheme().dump(kisokudata),kamoku=kamoku)
+    return render_template('time.html',data=kisokudata,kisoku=KamokuKisokuSchema().dump(kisokudata),kamoku=kamoku)
     #pass
 
 # csvアップロード用

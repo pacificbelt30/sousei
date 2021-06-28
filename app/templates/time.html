@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>時間設定</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    </head>
+
+    <body>
+    <div class="wrapper">
+        <header class="header">
+            <h1 class="title"><a href="select.html">出席管理</a></h1>
+            <nav class="nav">
+                <ul class="main-nav">
+                    <li><a href='{{ url_for('kamoku_all') }}'>講義選択</a></li>
+                    <li><a href='{{ url_for('syusseki_all',kamoku=kamoku) }}'>データ閲覧</a></li>
+                    <li><a href='{{ url_for('edit.edit_get',kamoku=kamoku) }}'>時間設定</a></li>
+                    <li><a href='{{ url_for('auth.logout_get') }}'>ログアウト</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            
+            <p>{{kamoku}}</p>
+            <!--時間の入力部分-->
+            <div class="time">
+                <!--
+                <p>出席開始時間</p>
+                <input type="time" name="attend" value="08:00" min="00:00" max="23:50" required>
+                <p>遅刻時間</p>
+                <input type="time" name="attend" value="08:30" min="00:00" max="23:50" required>
+                <p>欠席時間</p>
+                <input type="time" name="attend" value="09:00" min="00:00" max="23:50" required>
+                -->
+
+                <p>出席開始時間</p>
+                <input type="text" name="attend" value="{{kisoku['start_syusseki']}}">
+                <p>遅刻時間</p>
+                <input type="text" name="late" value="{{kisoku['start_tikoku']}}">
+                <p>欠席時間</p>
+                <input type="text" name="absence" value="{{kisoku['end_uketuke']}}">
+
+                <button type="submit">送信</button>
+            </div>   
+        </main>
+
+        <footer>
+
+        </footer>
+    </div>
+    </body>
+</html>

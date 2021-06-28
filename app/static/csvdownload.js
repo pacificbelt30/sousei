@@ -1,5 +1,6 @@
 /*
  * https://ryotah.hatenablog.com/entry/2017/03/22/211227 より拝借
+onclick="download(arrToCSV(join_head_body()),'{{kamoku}}.csv')"
  */
 function arrToCSV(arr) {
   return arr

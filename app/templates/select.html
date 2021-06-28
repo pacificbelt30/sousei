@@ -67,7 +67,7 @@
                         newCell = newRow.insertCell();
                         newText = document.createElement('a');
                         newText.href = '{{ url_for('syusseki_all',kamoku=i.id) }}';
-                        newText.text = '{{i.id}}';
+                        newText.text = '{{i.timedef_id}}';
                         newCell.appendChild(newText);
 
                         newCell = newRow.insertCell();

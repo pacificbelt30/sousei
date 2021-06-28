@@ -1,8 +1,9 @@
 <div>{{data}}</div>
-<div>{{csv}}</div>
+<div>{{kisoku}}</div>
+<div>{{kamoku}}</div>
 <form action="/edit" method="POST" enctype="multipart/form-data">
   <input type="text" name="kamoku" value="{{kamoku}}">
-  <input type="text" name="start_syusseki">
+  <input type="text" name="start_syusseki" value="{{kisoku['start_syusseki']}}">
   <input type="text" name="start_tikoku">
   <input type="text" name="end_uketuke">
   <input type="submit" value="送信">

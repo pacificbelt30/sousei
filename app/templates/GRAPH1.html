@@ -1,0 +1,107 @@
+<html>
+
+<head><title>出席表</title></head>
+
+<body>
+
+
+
+<table border="1" id="targetTable">
+<tr>
+    <th></th><th></th><th colspan="15">講義回</th><th colspan="2">累計</th>
+</tr>
+<tr>
+    <th>学籍番号</th><th width="100">名前</th>
+    
+    <th width="25">1</th>
+    <th width="25">2</th>
+    <th width="25">3</th>
+    <th width="25">4</th>
+    <th width="25">5</th>
+    <th width="25">6</th>
+    <th width="25">7</th>
+    <th width="25">8</th>
+    <th width="25">9</th>
+    <th width="25">10</th>
+    <th width="25">11</th>
+    <th width="25">12</th>
+    <th width="25">13</th>
+    <th width="25">14</th>
+    <th width="25">15</th>
+    <th width="25">出席</th>
+    <th width="25">欠席</th>
+</tr>
+
+
+<script>
+
+    //テーブルのヘッダ部分の配列
+    table_header = {{table_header|safe}}
+    // 出席データ
+    syusseki_list = [];
+    // 履修データ
+    risyu_list = {{risyu_list|safe}};
+    // 出席データ（データベースに保存されてたそのままの状態）
+    tmplist = {{syusseki_data|safe}};
+    // risyu_listをもとに 17x履修者分 のsyusseki_listの二次元配列を作成する
+    for(i=0;i<risyu_list.length;i++){
+        syusseki_list.push([]);
+        syusseki_list[i].push(risyu_list[i][0]);
+        syusseki_list[i].push(risyu_list[i][1]);
+        for(j=0;j<15;j++){
+            syusseki_list[i].push('');
+        }
+    }
+    
+    // tmplistのデータをsyusseki_listに格納する．
+    for(i=0;i<tmplist.length;i++){
+        for(j=0;j<syusseki_list.length;j++){
+            if(tmplist[i][0]==syusseki_list[j][1]){
+                syusseki_list[j][tmplist[i][2]+1] = tmplist[i][1];
+                break;
+            }
+        }
+    }
+
+/*
+    for(i=0;i<50;i++)
+    {
+        let table = document.getElementById('targetTable');
+        let newRow = table.insertRow();
+            
+        let newCell = newRow.insertCell();
+        let newText = document.createTextNode('B21P010');
+        newCell.appendChild(newText);
+            
+        newCell = newRow.insertCell();
+        newText = document.createTextNode('工藤');
+        newCell.appendChild(newText);
+
+        for(j=0;j<17;j++)
+        {
+            newCell = newRow.insertCell();
+            newText = document.createTextNode('💀');
+            newCell.appendChild(newText);
+        }
+    }
+        */
+    // 表のbody本体の描画
+    tbody = table.createTBody();
+    for(i=0;i<syusseki_list.length;i++){
+        rows.push(tbody.insertRow(-1));
+        for(j=0;j<syusseki_list[i].length;j++){
+            cell = rows[i].insertCell(-1);
+            cell.appendChild(document.createTextNode(syusseki_list[i][j]));
+        }
+    }
+        
+</script>
+
+
+
+
+</table>
+
+</body>
+
+</html>

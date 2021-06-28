@@ -31,8 +31,10 @@
     color: #444444;
     }
     .nav ul li a:hover{
-    background-color:#FFFFCC;
-    border-bottom: 5px solid #FFFFCC;
+    width: 100%;
+    border-radius: 5%;
+    background-color:#CCFFFF;
+    border-bottom: 5px solid #CCFFFF;
     }
     .nav ul li.current{
     font-weight: bold;

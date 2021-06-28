@@ -1,3 +1,7 @@
+/*
+onclick="graph_download('{{kamoku}}.png')"
+<canvas id="myChart" height=500 width=800></canvas>
+ * */
 filter_times = []; // 未実装のフィルタ機能に用いる
 filter_stu = []; // 未実装のフィルタ機能に用いる
 times = [];
