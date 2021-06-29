@@ -100,7 +100,11 @@ def syusseki_all(kamoku):
     #print('syusssekischema',risyujson)
     #print(data)
     #print(risyudata)
-
+    lectured = db.session.query(Lectured).filter(\
+            Lectured.kamoku_id == kamoku
+            ).all()
+    lectured_list = [s.kaisu for s in lectured ]
+    print(lectured_list)
     # 履修者データが空->ログインしている教員の担当科目ではない
     if risyudata == []:
         return abort(404)
@@ -127,7 +131,7 @@ def syusseki_all(kamoku):
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)
-    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku)
+    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=lectured_list)
 
 # 科目の出席データ ベンチ用ページ
 @app.route('/bench/<string:kamoku>',methods=['GET'])

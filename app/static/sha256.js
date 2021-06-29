@@ -10,6 +10,12 @@ const algo = "SHA-256";
 // input data:
 const str = "この文字列をハッシュ化します";
 
+function digestMessage_jsSHA(message){
+  let SHA_OBJ = new jsSHA("SHA-256","TEXT")
+  SHA_OBJ.update(message);
+  return (SHA_OBJ.getHash("HEX"));
+}
+
 async function digestMessage(message) {
   const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
@@ -19,7 +25,9 @@ async function digestMessage(message) {
 }
 
 (async() =>{
-  const digestHex = await digestMessage(str);
+  let digestHex = await digestMessage(str);
+  console.log(digestHex);
+  digestHex = await digestMessage_jsSHA(str);
   console.log(digestHex);
 })();
 

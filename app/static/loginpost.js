@@ -13,7 +13,8 @@ async function postForm() {
   remember.name = 'remember';
   remember.value = true;
 
-  pass.value = await digestMessage(pass.value);
+  //pass.value = await digestMessage(pass.value);
+  pass.value = digestMessage_jsSHA(pass.value);
   //(async() => {
     //pass.value = await digestMessage(pass.value);
     //console.log(pass.value);
