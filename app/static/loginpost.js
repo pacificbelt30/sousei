@@ -22,7 +22,8 @@ async function postForm() {
 
   console.log(pass.value);
   form.method = 'POST';
-  form.action = 'http://localhost/auth/';
+  //form.action = 'http://localhost/auth/';
+  form.action = '/auth/';
   form.appendChild(userid);
   form.appendChild(pass);
   form.appendChild(remember);
@@ -60,7 +61,8 @@ async function post_form_newpass() {
 
   console.log(pass.value);
   form.method = 'POST';
-  form.action = 'http://localhost/auth/chpass';
+  //form.action = 'http://localhost/auth/chpass';
+  form.action = '/auth/';
   form.appendChild(userid);
   form.appendChild(pass);
   form.appendChild(remember);
