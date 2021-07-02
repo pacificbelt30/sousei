@@ -73,8 +73,9 @@ function post_form_newpass() {
 }
 
 function inputpassword_to_sha256(){
+  pass_v = document.getElementById('password_v');
   pass = document.getElementById('password');
-  pass.value = digestMessage_jsSHA(pass.value);
+  pass.value = digestMessage_jsSHA(pass_v.value);
   console.log(pass.value);
   return true;
 }
