@@ -1,4 +1,4 @@
-async function postForm() {
+function postForm() {
   let form = document.createElement('form');
   let userid = document.createElement('input');
   userid.type = 'hidden';
@@ -32,7 +32,7 @@ async function postForm() {
   form.submit();
 }
 
-async function post_form_newpass() {
+function post_form_newpass() {
   let form = document.createElement('form');
   let userid = document.createElement('input');
   userid.type = 'hidden';
@@ -53,7 +53,8 @@ async function post_form_newpass() {
   remember.name = 'remember';
   remember.value = true;
 
-  pass.value = await digestMessage(pass.value);
+  //pass.value = await digestMessage(pass.value);
+  pass.value = digestMessage_jsSHA(pass.value);
   //(async() => {
     //pass.value = await digestMessage(pass.value);
     //console.log(pass.value);
@@ -69,4 +70,11 @@ async function post_form_newpass() {
   document.body.appendChild(form);
 
   form.submit();
+}
+
+function inputpassword_to_sha256(){
+  pass = document.getElementById('password');
+  pass.value = digestMessage_jsSHA(pass.value);
+  console.log(pass.value);
+  return true;
 }

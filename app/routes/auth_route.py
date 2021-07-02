@@ -16,7 +16,8 @@ auth_route = Blueprint('auth', __name__, url_prefix='/auth')
 def login_get():
     if current_user.is_authenticated:
         return redirect(url_for('kamoku_all'))
-    return render_template('login.html')
+    return render_template('password.html')
+    #return render_template('login.html')
     #pass
 
 # 

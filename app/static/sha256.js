@@ -11,7 +11,7 @@ const algo = "SHA-256";
 const str = "この文字列をハッシュ化します";
 
 function digestMessage_jsSHA(message){
-  let SHA_OBJ = new jsSHA("SHA-256","TEXT")
+  let SHA_OBJ = new jsSHA(algo,"TEXT");
   SHA_OBJ.update(message);
   return (SHA_OBJ.getHash("HEX"));
 }
@@ -25,9 +25,10 @@ async function digestMessage(message) {
 }
 
 (async() =>{
-  let digestHex = await digestMessage(str);
-  console.log(digestHex);
-  digestHex = await digestMessage_jsSHA(str);
-  console.log(digestHex);
+  console.log('ハッシュテスト\n平文:',str)
+  let digestHex = await digestMessage_jsSHA(str);
+  console.log('jsSHA:',digestHex);
+  digestHex = await digestMessage(str);
+  console.log('Web Crypto API:',digestHex);
 })();
 
