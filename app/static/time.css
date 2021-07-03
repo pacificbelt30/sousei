@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+#form{
+    width: 580px;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding: 25px;
+}
+
+.time_text{
+    font-size: 20px;
+}
+
+.time_form{
+    width: 130px;
+    height: 30px;
+    font-size: 20px;
+}
+
+ul{
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding-top: 50px;
+}
+
+.time_form {
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.btn{
+    text-align: center;
+    color:#fff;
+    width: 30%;
+    height: 50px;
+    font-size: 20px;
+    padding:5px;
+    padding-top: 10px;
+    margin-top:15px;
+    background-color:#126df4;
+    border-radius: 10px;
+    box-shadow:0px 4px 4px #999;
+}

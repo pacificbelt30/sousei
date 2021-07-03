@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='time.css') }}">
     </head>
 
     <body>
@@ -26,25 +27,21 @@
             
             <p>{{kamoku}}</p>
             <!--時間の入力部分-->
-            <form action="/edit/" method="POST" enctype="multipart/form-data">
-                <div class="time">
-                    <!--
-                    <p>出席開始時間</p>
-                    <input type="time" name="attend" value="08:00" min="00:00" max="23:50" required>
-                    <p>遅刻時間</p>
-                    <input type="time" name="attend" value="08:30" min="00:00" max="23:50" required>
-                    <p>欠席時間</p>
-                    <input type="time" name="attend" value="09:00" min="00:00" max="23:50" required>
-                    -->
-                    <input type="text" name="kamoku" value="{{kamoku}}">
+            <form id="form" action="/edit/" method="POST" enctype="multipart/form-data">
+                <input type="text" name="kamoku" value="{{kamoku}}">
+                <ul class="time" >    
+                <li class="time_text">出席限度時間：</li>
+                <li><input type="text" name="syusseki_gendo" value="{{kisoku['syusseki_gendo']}}"></li>
+                </ul>
 
-                    <p>出席猶予時間</p>
-                    <input type="text" name="syusseki_gendo" value="{{kisoku['syusseki_gendo']}}">
-                    <p>遅刻猶予時間</p>
-                    <input type="text" name="tikoku_gendo" value="{{kisoku['tikoku_gendo']}}">
-
-                    <button type="submit">送信</button>
-                </div>   
+                <ul class="time">
+                <li class="time_text">遅刻限度時間：</li>
+                <li><input type="text" name="tikoku_gendo" value="{{kisoku['tikoku_gendo']}}"></li>
+                </ul>
+                    
+                <ul>
+                    <input type="submit" class="btn" accesskey="enter">
+                </ul> 
             </form>
         </main>
 
