@@ -262,19 +262,24 @@ class KamokuKisoku(db.Model):
 
     #id = db.Column(db.Integer,autoincrement=True,nullable=False, unique=True, primary_key=True) # 科目IDを外部キーにもつ
     id = db.Column(db.String(20),db.ForeignKey('kamoku.id'),nullable=False, unique=True, primary_key=True) # 科目IDを外部キーにもつ
-    start_syusseki = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
-    start_tikoku = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
-    end_uketuke = db.Column(db.Integer,nullable=False, unique=False) # 受付終了時間（相対時間）
+    #start_syusseki = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
+    #start_tikoku = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
+    #end_uketuke = db.Column(db.Integer,nullable=False, unique=False) # 受付終了時間（相対時間）
     #end_syusseki = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
     #end_tikoku = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
     #kamoku = db.relationship('Kamoku',uselist=False,backref='kamokukisoku')
     #kamoku = db.relationship('Kamoku')
+    syusseki_gendo = db.Column(db.Integer,nullable=False, unique=False) # 出席開始時間（相対時間）
+    tikoku_gendo = db.Column(db.Integer,nullable=False, unique=False) # 遅刻開始時間（相対時間）
 
-    def __init__(self, id, start_syusseki, start_tikoku, end_uketuke):
+    #def __init__(self, id, start_syusseki, start_tikoku, end_uketuke):
+    def __init__(self, id, syusseki_gendo, tikoku_gendo):
         self.id = id
-        self.start_syusseki = start_syusseki
-        self.start_tikoku = start_tikoku
-        self.end_uketuke = end_uketuke
+        self.syusseki_gendo = syusseki_gendo
+        self.tikoku_gendo = tikoku_gendo
+        #self.start_syusseki = start_syusseki
+        #self.start_tikoku = start_tikoku
+        #self.end_uketuke = end_uketuke
 
     def __repr__(self):
         return '<KamokuKisoku %s>' % self.id
@@ -285,7 +290,7 @@ class KamokuKisoku(db.Model):
         data = csvread.csv_reader(filename)
         #kamokujoindata = db.session.join(Kamoku,Timedef)
         #dbdata = [KamokuKisoku(s[0],s[6],s[7],db.session.query(Kamoku,Timedef).join(Kamoku,Kamoku.timedef_id==Timedef.id).filter(s[0]==Kamoku.id).first().Timedef.zikan) for s in data]
-        dbdata = [KamokuKisoku(s[0],s[7],s[8],90) for s in data]
+        dbdata = [KamokuKisoku(s[0],s[7],s[8]) for s in data]
         try:
             db.session.add_all(dbdata)
             db.session.commit()

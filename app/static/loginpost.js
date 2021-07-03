@@ -1,4 +1,9 @@
+// ログイン情報をポストするためのやつ
 function postForm() {
+  if(!validation()){
+    console.log('失敗');
+    return false;
+  }
   let form = document.createElement('form');
   let userid = document.createElement('input');
   userid.type = 'hidden';
@@ -32,6 +37,7 @@ function postForm() {
   form.submit();
 }
 
+// パスワード変更時に使用する
 function post_form_newpass() {
   let form = document.createElement('form');
   let userid = document.createElement('input');
@@ -72,6 +78,7 @@ function post_form_newpass() {
   form.submit();
 }
 
+// 入力されたパスワードをsha256にし，入力欄を上書きする
 function inputpassword_to_sha256(){
   pass_v = document.getElementById('password_v');
   pass = document.getElementById('password');
@@ -79,3 +86,26 @@ function inputpassword_to_sha256(){
   console.log(pass.value);
   return true;
 }
+
+// 空かどうか
+function validation(){
+  let userid = document.getElementById('userid');
+  let pass = document.getElementById('password');
+  let flag = true;
+  if(!userid.checkValidity()){
+    document.getElementById('error_userid').innerHTML = '';
+    document.getElementById('error_userid').innerHTML = '入力が不正です';
+    document.getElementById('error_userid').color = 'red';
+    document.getElementById('userid').style.border = "2px solid red";
+    flag = false;
+  }
+  if(!pass.checkValidity()){
+    document.getElementById('error_password').innerHTML = '';
+    document.getElementById('error_password').innerHTML = '入力が不正です';
+    document.getElementById('error_password').color = 'red';
+    document.getElementById('password').style.border = "2px solid red";
+    flag = false;
+  }
+  return flag;
+}
+

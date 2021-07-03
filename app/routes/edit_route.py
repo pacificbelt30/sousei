@@ -23,9 +23,6 @@ def edit_get():
     print(kamoku,type(kamoku))
     #json = request.get_json()
     kisokudata = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
-    print({'status':'ok','kisoku':KamokuKisokuSchema().dump(kisokudata)})
-    test = db.session.query(KamokuKisoku).all()
-    print({'status':'ok','kisoku':KamokuKisokuSchema(many=True).dump(test)})
 
     return render_template('time.html',data=kisokudata,kisoku=KamokuKisokuSchema().dump(kisokudata),kamoku=kamoku)
     #pass
@@ -42,15 +39,22 @@ end_uketuke：受付終了時間
 """
 @edit_route.route('/',methods=['POST'])
 def edit_post():
+    # フォームのデータを取得
     kamoku = request.form["kamoku"]
-    start_syusseki = request.form["start_syusseki"]
-    start_tikoku = request.form["start_tikoku"]
-    end_uketuke = request.form["end_uketuke"]
+    #start_syusseki = request.form["start_syusseki"]
+    #start_tikoku = request.form["start_tikoku"]
+    #end_uketuke = request.form["end_uketuke"]
+    syusseki_gendo = request.form['syusseki_gendo']
+    tikoku_gendo = request.form['tikoku_gendo']
     print(kamoku)
+
+    # 科目IDが一致するデータの科目規則を更新する
     kisokudata = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
-    kisokudata.start_syusseki = start_syusseki
-    kisokudata.start_tikoku = start_tikoku
-    kisokudata.end_uketuke = end_uketuke
+    #kisokudata.start_syusseki = start_syusseki
+    #kisokudata.start_tikoku = start_tikoku
+    #kisokudata.end_uketuke = end_uketuke
+    kisokudata.syusseki_gendo = syusseki_gendo
+    kisokudata.tikoku_gendo = tikoku_gendo
     try:
         db.session.commit()
     except:

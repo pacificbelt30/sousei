@@ -26,25 +26,26 @@
             
             <p>{{kamoku}}</p>
             <!--時間の入力部分-->
-            <div class="time">
-                <!--
-                <p>出席開始時間</p>
-                <input type="time" name="attend" value="08:00" min="00:00" max="23:50" required>
-                <p>遅刻時間</p>
-                <input type="time" name="attend" value="08:30" min="00:00" max="23:50" required>
-                <p>欠席時間</p>
-                <input type="time" name="attend" value="09:00" min="00:00" max="23:50" required>
-                -->
+            <form action="/edit/" method="POST" enctype="multipart/form-data">
+                <div class="time">
+                    <!--
+                    <p>出席開始時間</p>
+                    <input type="time" name="attend" value="08:00" min="00:00" max="23:50" required>
+                    <p>遅刻時間</p>
+                    <input type="time" name="attend" value="08:30" min="00:00" max="23:50" required>
+                    <p>欠席時間</p>
+                    <input type="time" name="attend" value="09:00" min="00:00" max="23:50" required>
+                    -->
+                    <input type="text" name="kamoku" value="{{kamoku}}">
 
-                <p>出席開始時間</p>
-                <input type="text" name="attend" value="{{kisoku['start_syusseki']}}">
-                <p>遅刻時間</p>
-                <input type="text" name="late" value="{{kisoku['start_tikoku']}}">
-                <p>欠席時間</p>
-                <input type="text" name="absence" value="{{kisoku['end_uketuke']}}">
+                    <p>出席猶予時間</p>
+                    <input type="text" name="syusseki_gendo" value="{{kisoku['syusseki_gendo']}}">
+                    <p>遅刻猶予時間</p>
+                    <input type="text" name="tikoku_gendo" value="{{kisoku['tikoku_gendo']}}">
 
-                <button type="submit">送信</button>
-            </div>   
+                    <button type="submit">送信</button>
+                </div>   
+            </form>
         </main>
 
         <footer>

@@ -1,3 +1,4 @@
+// 要注意者を表示する関数
 function create_attention_table(){
   let attend_table = document.getElementById('attend');
   let table = document.getElementById('attention');
