@@ -32,6 +32,7 @@ def create_app():
     #session.permanent = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_POOL_SIZE"] = 3
+    app.config["SQLALCHEMY_POOL_PRE_PING"] = True
 
     return app
 

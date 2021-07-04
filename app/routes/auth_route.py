@@ -14,7 +14,8 @@ auth_route = Blueprint('auth', __name__, url_prefix='/auth')
 # ログインしている場合は/user にリダイレクト
 @auth_route.route('/',methods=['GET'])
 def login_get():
-    if current_user.is_authenticated:
+    print('ログインページ：')
+    if current_user.is_authenticated: # ログインしている場合は科目選択ページへ
         return redirect(url_for('kamoku_all'))
     return render_template('password.html')
     #return render_template('login.html')
@@ -61,6 +62,9 @@ def logout_get():
 @auth_route.route('/chpass',methods=['GET'])
 @login_required
 def chpass_get():
+    print('パスワード変更ページ：')
+    print('userid:',current_user.id)
+    print('username:',current_user.kyoin.name)
     return render_template('change_password.html',id=current_user.id)
 
 # パスワード変更

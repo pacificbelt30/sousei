@@ -27,8 +27,7 @@
             
             <p>{{kamoku}}</p>
             <!--時間の入力部分-->
-            <form id="form" action="/edit/" method="POST" enctype="multipart/form-data">
-                <input type="text" name="kamoku" value="{{kamoku}}">
+            <form id="form" action="{{ url_for('edit.edit_post',kamoku=kamoku) }}" method="POST" enctype="multipart/form-data">
                 <ul class="time" >    
                 <li class="time_text">出席限度時間：</li>
                 <li><input type="text" name="syusseki_gendo" value="{{kisoku['syusseki_gendo']}}"></li>

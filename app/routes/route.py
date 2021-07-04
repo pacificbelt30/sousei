@@ -47,7 +47,7 @@ def test():
     # ajax cookie test
     return jsonify({"id":current_user.id})
 
-# 教員ページ 
+# 科目選択ページ 
 # 取得データ
 """
 kamoku_data = [KamokuClass1,KamokuClass2]
@@ -59,6 +59,7 @@ def kamoku_all():
     #kyoin = request.args.get('kyoin')
     kyoin = current_user.id
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
+    print('科目選択ページ：')
     print('userid:',current_user.id)
     print('username:',current_user.kyoin.name)
     #print('username:',kamoku_data[0].kyoin.name)
@@ -79,6 +80,10 @@ syusseki_data：出席データ ex)[['A','出席',1],['B','出席',2],...]
 @cache.cached(timeout=30)
 def syusseki_all(kamoku):
     kyoin = current_user.id
+    print('出席データ閲覧ページ：')
+    print('userid:',current_user.id)
+    print('username:',current_user.kyoin.name)
+    print('kamoku:',kamoku)
 
     # 科目のデータ
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
@@ -104,10 +109,12 @@ def syusseki_all(kamoku):
             Lectured.kamoku_id == kamoku
             ).all()
     lectured_list = [s.kaisu for s in lectured ]
-    print(lectured_list)
+    print('講義開催回：',lectured_list)
+
     # 履修者データが空->ログインしている教員の担当科目ではない
     if risyudata == []:
         return abort(404)
+
     # 0列目学籍番号，1列目学生氏名，2~17列目各回の出席データ
     table_header = ['学籍番号','氏名','第1回','第2回','第3回','第4回','第5回','第6回',\
             '第7回','第8回','第9回','第10回','第11回','第12回','第13回','第14回','第15回']
