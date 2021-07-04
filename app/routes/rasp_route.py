@@ -39,7 +39,7 @@ def csv_post():
 @rasp_route.route('/',methods=['GET'])
 def csv_get():
     kamoku = request.args.get('kamoku') # getパラメータ取得 ex) /csv?kamoku=F1
-    print(type(kamoku))
+    # print(type(kamoku))
     #json = request.get_json()
     data = {"kamoku":kamoku,"kisoku":"","csv":list()} # 送信するデータ
     #risyudata = db.session.query(Risyu,Gakusei,Kamoku,KamokuKisoku).filter( \
@@ -73,7 +73,7 @@ def csv_get():
     
     # print(risyudata[0].kamoku.kamokukisoku.start_syusseki)
     # csv = UserSchema().dump(risyudata)
-    print(risyudata[0].gakusei.id)
+    # print(risyudata[0].gakusei.id)
     csv = {}
     
     for i in range(len(risyudata)):
@@ -94,9 +94,9 @@ def csv_get():
     #print(gakusei)
     data["csv"] = csv
     tmp=dict()
-    tmp["start_syusseki"] = risyudata[0].kamoku.kamokukisoku.start_syusseki
-    tmp["start_tikoku"] = risyudata[0].kamoku.kamokukisoku.start_tikoku
-    tmp["end_uketuke"] = risyudata[0].kamoku.kamokukisoku.end_uketuke
+    tmp["syusseki_gendo"] = risyudata[0].kamoku.kamokukisoku.syusseki_gendo
+    tmp["tikoku_gendo"] = risyudata[0].kamoku.kamokukisoku.tikoku_gendo
+    # tmp["end_uketuke"] = risyudata[0].kamoku.kamokukisoku.end_uketuke
     data['kisoku']=dict()
     data['kisoku']['1']=tmp
     return jsonify(data)

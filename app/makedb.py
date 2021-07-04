@@ -18,5 +18,6 @@ def makedb():
     for i in range(1,16):
         Syusseki.csv_reg("data/syusseki2.csv","F1",i)
     Syusseki.csv_reg("data/syusseki2.csv","M2",1)
+    Syusseki.csv_reg("data/syusseki2.csv","M2",3)
     LoginUser.csv_reg()
 
