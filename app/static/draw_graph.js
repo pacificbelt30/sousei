@@ -2,22 +2,23 @@
 onclick="graph_download('{{kamoku}}.png')"
 <canvas id="myChart" height=500 width=800></canvas>
  * */
-filter_times = []; // 未実装のフィルタ機能に用いる
-filter_stu = []; // 未実装のフィルタ機能に用いる
-times = [];
-attend = []; // 出席者数
-late = []; // 遅刻者数
-absent = []; // 欠席者数
-
+let filter_times = []; // 未実装のフィルタ機能に用いる
+let filter_stu = []; // 未実装のフィルタ機能に用いる
+let times = [];
+let attend = []; // 出席者数
+let late = []; // 遅刻者数
+let absent = []; // 欠席者数
+console.log('DEBUG');
 
 
 function val_reset_tate(){
-  times = []
-  attend = []
-  late = []
-  absent = []
+  times = [];
+  attend = [];
+  late = [];
+  absent = [];
+  filter_times = lectured_list;
   for (i = 0, k = 0, m = 0; i < 15; i++){ 
-      if (i != filter_times[k] - 1) { // 対応する生徒がフィルタに引っかかってないか
+      if (i == filter_times[k] - 1) { // 対応する生徒がフィルタに引っかかってないか
           times.push(i + 1); // 存在する授業日のラベルを追加
           attend.push(0); // 出席者の配列に0を追加（インクリメントするため）
           late.push(0); // 遅刻者の配列に0を追加

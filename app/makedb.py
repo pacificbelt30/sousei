@@ -13,7 +13,10 @@ def makedb():
     kamokudata = db.session.query(Kamoku).all()
     for s in kamokudata:
         Risyu.csv_reg(s.id)
-    Syusseki.csv_reg("data/syusseki.csv","F1",1)
-    Syusseki.csv_reg("data/syusseki2.csv","F1",3)
+
+    # テストデータ
+    for i in range(1,16):
+        Syusseki.csv_reg("data/syusseki2.csv","F1",i)
+    Syusseki.csv_reg("data/syusseki2.csv","M2",1)
     LoginUser.csv_reg()
 
