@@ -68,7 +68,7 @@ function table_create(){
   // 出席回数と遅刻回数の描画
   for(let i=0;i<syusseki_list.length;i++){
     let table_body = document.getElementById('attend').tBodies;
-    console.log(i,syusseki_list.length);
+    //console.log(i,syusseki_list.length);
     table_body[0].rows[i].cells[17].innerHTML = count_attend(syusseki_list[i]);
     table_body[0].rows[i].cells[18].innerHTML = count_late(syusseki_list[i]);
   }

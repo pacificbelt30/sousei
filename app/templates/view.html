@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='table_filter.css') }}">
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
@@ -13,6 +14,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='csvdownload.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='table_create.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='attention.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='table_filter.js') }}"></script>
     </head>
 
     <body>
@@ -61,7 +63,7 @@
                                 <th width="25" class="count">14</th>
                                 <th width="25" class="count">15</th>
                                 <th width="25" class="sum">出席</th>
-                                <th width="25" class="sum">欠席</th>
+                                <th width="25" class="sum">遅刻</th>
                             </tr>
                         </thead>
                     </table>

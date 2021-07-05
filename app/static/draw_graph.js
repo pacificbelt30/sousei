@@ -17,6 +17,7 @@ function val_reset_tate(){
   late = [];
   absent = [];
   filter_times = lectured_list;
+  console.log('現在',lectured_list)
   for (i = 0, k = 0, m = 0; i < 15; i++){ 
       if (i == filter_times[k] - 1) { // 対応する生徒がフィルタに引っかかってないか
           times.push(i + 1); // 存在する授業日のラベルを追加
@@ -37,7 +38,9 @@ function val_reset_tate(){
           late[m] = late[m]/syusseki_list.length;
           absent[m] = absent[m]/syusseki_list.length;
           m++;
-      } else { k++; }
+          k++;
+      //} else { k++; }
+      }
   }
 }
 /*
@@ -133,9 +136,9 @@ function val_reset(){
 function draw_graph() {
   const myCanvas = document.getElementById("myChart");
     val_reset_tate();
-    //if(mychart){
-        //mychart.destroy();
-    //}
+    if(typeof mychart !== 'undefined'&&mychart){
+        mychart.destroy();
+    }
 
   window.mychart = new Chart(myCanvas, {
     //type: "horizontalBar", // 横なら "horizontalBar" を指定
@@ -201,4 +204,4 @@ function graph_download(filename){
     link.click();
 }
 
-window.onload = draw_graph;
+//window.onload = draw_graph;

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,url_for,redirect,abort
 from flask_login import login_required,current_user
-from app.application import app,cache
+from app.application import app,cache,cur,conn
 from app.models.model import *
 from app.models.schema import *
 from app.routes import rasp_route,edit_route,auth_route
@@ -120,11 +120,7 @@ def syusseki_all(kamoku):
             '第7回','第8回','第9回','第10回','第11回','第12回','第13回','第14回','第15回']
 
     # [学籍番号,学生氏名] の配列
-    risyusya_info_list = list()
-    for i in range(len(risyudata)):
-        risyusya_info_list.append(list())
-        risyusya_info_list[i].append(risyudata[i].gakusei.number)
-        risyusya_info_list[i].append(risyudata[i].gakusei.name)
+    risyusya_info_list = risyujson
 
     # [学生氏名,出欠,授業回数] の配列
     table = list()
@@ -134,25 +130,32 @@ def syusseki_all(kamoku):
         table[i].append(data[i].risyu.gakusei.name)
         table[i].append(data[i].syukketu)
         table[i].append(data[i].kaisu)
-    risyusya_info_list = risyujson
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)
-    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=lectured_list)
+    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=sorted(lectured_list))
 
 # 科目の出席データ ベンチ用ページ
 @app.route('/bench/<string:kamoku>',methods=['GET'])
 #@cache.cached(timeout=30)
 def bench_syusseki(kamoku):
     kyoin = 'P011'
+    print('出席データ閲覧ページ：')
+    print('kamoku:',kamoku)
 
     # 科目のデータ
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
 
     # 科目の出席データ
+    start = time.time()
     data = db.session.query(Syusseki).join(Risyu).filter(\
             Risyu.kamoku_id==kamoku\
             ).all()
+    #data = db.session.query(Syusseki).all()
+    #print(conn.is_connected())
+    #cur.execute("select * from syusseki")
+    #a = cur.fetchall()
+    print(time.time()-start)
 
     # 科目の履修者データ(教員のidでも条件付をしている)
     risyudata = db.session.query(Risyu).join(Kamoku).filter(\
@@ -170,20 +173,18 @@ def bench_syusseki(kamoku):
             Lectured.kamoku_id == kamoku
             ).all()
     lectured_list = [s.kaisu for s in lectured ]
-    print(lectured_list)
+    print('講義開催回：',lectured_list)
+
     # 履修者データが空->ログインしている教員の担当科目ではない
     if risyudata == []:
         return abort(404)
+
     # 0列目学籍番号，1列目学生氏名，2~17列目各回の出席データ
     table_header = ['学籍番号','氏名','第1回','第2回','第3回','第4回','第5回','第6回',\
             '第7回','第8回','第9回','第10回','第11回','第12回','第13回','第14回','第15回']
 
     # [学籍番号,学生氏名] の配列
-    risyusya_info_list = list()
-    for i in range(len(risyudata)):
-        risyusya_info_list.append(list())
-        risyusya_info_list[i].append(risyudata[i].gakusei.number)
-        risyusya_info_list[i].append(risyudata[i].gakusei.name)
+    risyusya_info_list = risyujson
 
     # [学生氏名,出欠,授業回数] の配列
     table = list()
@@ -193,11 +194,10 @@ def bench_syusseki(kamoku):
         table[i].append(data[i].risyu.gakusei.name)
         table[i].append(data[i].syukketu)
         table[i].append(data[i].kaisu)
-    risyusya_info_list = risyujson
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)
-    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=lectured_list)
+    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=sorted(lectured_list))
 
 
 # データベース作成

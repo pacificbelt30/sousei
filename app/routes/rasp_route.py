@@ -49,6 +49,8 @@ def csv_get():
         #Kamoku.id==KamokuKisoku.id\
         #).all()
     risyudata = db.session.query(Risyu).filter(Risyu.kamoku_id == kamoku).all()
+    jigen = db.session.query(Kamoku).filter(Kamoku.id == kamoku).first().timedef_id
+    kaisi = db.session.query(Timedef).filter(Timedef.zigen == jigen).first().zikan
     #csv = list()
     #for i in range(len(risyudata)):
     #    csv.append(list())
@@ -97,8 +99,8 @@ def csv_get():
     tmp["syusseki_gendo"] = risyudata[0].kamoku.kamokukisoku.syusseki_gendo
     tmp["tikoku_gendo"] = risyudata[0].kamoku.kamokukisoku.tikoku_gendo
     # tmp["end_uketuke"] = risyudata[0].kamoku.kamokukisoku.end_uketuke
+    tmp["start_kougi"] = kaisi
     data['kisoku']=dict()
     data['kisoku']['1']=tmp
     return jsonify(data)
     #pass
-

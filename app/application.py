@@ -9,7 +9,7 @@ from flask_caching import Cache
 from flask_login import LoginManager
 from datetime import timedelta
 from app import env
-
+import mysql.connector as mydb
 #from models.database import init_db
 
 
@@ -27,6 +27,7 @@ def create_app():
           'port': env.DB_PORT,
           'db_name': env.DB_NAME
       })
+
     app.config["SECRET_KEY"] = env.SECRET_KEY
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=10)
     #session.permanent = True
@@ -35,7 +36,14 @@ def create_app():
     app.config["SQLALCHEMY_POOL_PRE_PING"] = True
 
     return app
-
+conn = mydb.connect(
+          user= env.DB_USER,
+          password = env.DB_PASS,
+          host = env.DB_HOST,
+          port = env.DB_PORT,
+          database = env.DB_NAME
+        )
+cur = conn.cursor()
 app = create_app()
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
