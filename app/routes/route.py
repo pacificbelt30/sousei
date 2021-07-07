@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,url_for,redirect,abort
 from flask_login import login_required,current_user
-from app.application import app,cache,cur,conn
+from app.application import app,cache
 from app.models.model import *
 from app.models.schema import *
 from app.routes import rasp_route,edit_route,auth_route

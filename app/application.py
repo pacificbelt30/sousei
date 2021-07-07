@@ -4,6 +4,7 @@ flask appの初期化を行い、flask appオブジェクトの実体を持つ
 """
 from flask import Flask, request,jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy, SessionBase
+from sqlalchemy.pool import Pool
 from flask_marshmallow import Marshmallow
 from flask_caching import Cache
 from flask_login import LoginManager
@@ -36,14 +37,6 @@ def create_app():
     app.config["SQLALCHEMY_POOL_PRE_PING"] = True
 
     return app
-conn = mydb.connect(
-          user= env.DB_USER,
-          password = env.DB_PASS,
-          host = env.DB_HOST,
-          port = env.DB_PORT,
-          database = env.DB_NAME
-        )
-cur = conn.cursor()
 app = create_app()
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -59,3 +52,18 @@ from app.models.model import *
 def load_user(user_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
     return LoginUser.query.get(user_id)
+
+@db.event.listens_for(Pool, "checkout")
+def ping_connection(dbapi_connection, connection_record, connection_proxy):
+    cursor = dbapi_connection.cursor()
+    try:
+        cursor.execute("SELECT 1")
+    except:
+        # optional - dispose the whole pool
+        # instead of invalidating one at a time
+        # connection_proxy._pool.dispose()
+
+        # raise DisconnectionError - pool will try
+        # connecting again up to three times before raising.
+        raise exc.DisconnectionError()
+    cursor.close()
