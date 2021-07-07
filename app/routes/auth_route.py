@@ -65,7 +65,7 @@ def chpass_get():
     print('パスワード変更ページ：')
     print('userid:',current_user.id)
     print('username:',current_user.kyoin.name)
-    return render_template('change_password.html',id=current_user.id)
+    return render_template('passchange.html',id=current_user.id)
 
 # パスワード変更
 @auth_route.route('/chpass',methods=['POST'])

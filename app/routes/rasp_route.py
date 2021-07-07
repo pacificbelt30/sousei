@@ -2,6 +2,7 @@
 from flask import Flask, request,jsonify,render_template,Blueprint
 #from app.application import app
 from app.models.model import *
+import json
 import time
 
 # /csv をルートとして見る
@@ -11,11 +12,17 @@ rasp_route = Blueprint('csv', __name__, url_prefix='/csv')
 #/csv からアクセスできる
 @rasp_route.route('/',methods=['POST'])
 def csv_post():
-    json = request.get_json()
-    print(json)
-    Syusseki.csv_reg_nf(json)
-    return jsonify(json)
-    #pass
+    # json = request.get_json()
+    # print(json)
+    # Syusseki.csv_reg_nf(json)
+    # return jsonify(json)
+    # #pass
+    data = request.get_json()
+    print(type(data))
+    data_j = json.loads(data)
+    print(type(data_j))
+    Syusseki.csv_reg_nf(data_j)
+    return jsonify(data_j)
 
 #/csv からアクセスできる
 """

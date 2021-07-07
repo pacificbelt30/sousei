@@ -372,9 +372,9 @@ class Syusseki(db.Model):
         data=list()
         s_data=list()
         for i in range(len(json_data['csv'])):
-            data.append(json_data['csv'][i]['number'])
-            s_data.append(json_data['csv'][i]['shusseki'])
-
+            data.append(json_data['csv'][str(i)]['number'])
+            s_data.append(json_data['csv'][str(i)]['syusseki'])
+        print('dbdata:',data)
         dbdata = list()
         dbdata_k = list()
         for s in range(len(data)):
@@ -400,6 +400,7 @@ class Syusseki(db.Model):
             if db.session.query(Lectured).filter(json_data["kamoku"] == Lectured.id, json_data["kaisu"] == Lectured.kaisu).first() is None:
                 date_today = str(datetime.date.today().month)+"/"+str(datetime.date.today().day) # 例2/29
                 dbdata_k = (Lectured(json_data["kamoku"],json_data["kaisu"],str(datetime.date.today()))) # 日付のみが欲しい場合はdate_todayに変更
+                print('dbdata_k:',dbdata_k)
         except:
             import traceback
             traceback.print_exc()
@@ -434,7 +435,7 @@ class Lectured(db.Model):
         self.date = date
 
     def __repr__(self):
-        return '<Lectured %r>' % self.id
+        return '<Lectured %s>' % self.kamoku_id
         #pass
 
 class CRUD:

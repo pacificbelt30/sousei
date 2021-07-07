@@ -47,8 +47,8 @@ function post_form_newpass() {
   let pass = document.createElement('input');
   pass.type = 'hidden';
   pass.name = 'password';
-  if(document.getElementById('new_password').value == document.getElementById('new_password_re').value){
-    pass.value = document.getElementById('new_password').value;
+  if(document.getElementById('password').value == document.getElementById('password_re').value){
+    pass.value = document.getElementById('password_re').value;
   }
   else{
     console.log('error');

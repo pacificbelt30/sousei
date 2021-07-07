@@ -5,6 +5,7 @@ from app.application import app,cache,cur,conn
 from app.models.model import *
 from app.models.schema import *
 from app.routes import rasp_route,edit_route,auth_route
+from sqlalchemy.dialects import mysql
 import time
 
 """
@@ -64,7 +65,7 @@ def kamoku_all():
     print('username:',current_user.kyoin.name)
     #print('username:',kamoku_data[0].kyoin.name)
     #return render_template('user.html',kamoku_data=kamoku_data)
-    return render_template('select.html',kamoku_data=kamoku_data)
+    return render_template('select.html',id=current_user.id,kamoku_data=kamoku_data)
 
 # 科目の出席データ
 # 取得データ
@@ -85,6 +86,7 @@ def syusseki_all(kamoku):
     print('username:',current_user.kyoin.name)
     print('kamoku:',kamoku)
 
+    kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first().name
     # 科目のデータ
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
 
@@ -133,7 +135,7 @@ def syusseki_all(kamoku):
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)
-    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=sorted(lectured_list))
+    return render_template('view.html',id=current_user.id,kamoku_name=kamoku_name,table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=sorted(lectured_list))
 
 # 科目の出席データ ベンチ用ページ
 @app.route('/bench/<string:kamoku>',methods=['GET'])
@@ -148,9 +150,16 @@ def bench_syusseki(kamoku):
 
     # 科目の出席データ
     start = time.time()
-    data = db.session.query(Syusseki).join(Risyu).filter(\
-            Risyu.kamoku_id==kamoku\
-            ).all()
+    #data = db.session.query(Syusseki).join(Risyu).filter(\
+            #Risyu.kamoku_id==kamoku\
+            #)
+    #print(data.statement.compile(dialect=mysql.dialect(),compile_kwargs={"literal_binds":True}))
+    sql = "SELECT syusseki.id, syusseki.risyu_id, syusseki.syukketu, syusseki.kaisu, syusseki.regist_date, kamoku_1.id AS id_1, kamoku_1.name, kamoku_1.timedef_id, kamoku_1.room, kamoku_1.youbi, kamoku_1.kyoin_id1, gakusei_1.id AS id_2, gakusei_1.name AS name_1, gakusei_1.kana, gakusei_1.seibetu, gakusei_1.gakunen, gakusei_1.number, risyu_1.id AS id_3, risyu_1.kamoku_id, risyu_1.gakusei_id FROM syusseki INNER JOIN risyu ON risyu.id = syusseki.risyu_id LEFT OUTER JOIN risyu AS risyu_1 ON risyu_1.id = syusseki.risyu_id LEFT OUTER JOIN kamoku AS kamoku_1 ON kamoku_1.id = risyu_1.kamoku_id LEFT OUTER JOIN gakusei AS gakusei_1 ON gakusei_1.number = risyu_1.gakusei_id WHERE risyu.kamoku_id = 'F1'"
+    data = db.session.execute(sql)
+    #for i in data:
+        #print(i)
+    #print(data)
+
     #data = db.session.query(Syusseki).all()
     #print(conn.is_connected())
     #cur.execute("select * from syusseki")
@@ -188,12 +197,16 @@ def bench_syusseki(kamoku):
 
     # [学生氏名,出欠,授業回数] の配列
     table = list()
-    for i in range(len(data)):
-    #for i in range(1500):
+    #for i in range(len(data)):
+    for i,d in enumerate(data):
         table.append([])
-        table[i].append(data[i].risyu.gakusei.name)
-        table[i].append(data[i].syukketu)
-        table[i].append(data[i].kaisu)
+        #table[i].append(data[i].risyu.gakusei.name)
+        #table[i].append(data[i].syukketu)
+        #table[i].append(data[i].kaisu)
+        table[i].append(d[12])
+        table[i].append(d[2])
+        table[i].append(d[3])
+        #print(table[i])
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)

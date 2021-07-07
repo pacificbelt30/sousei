@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>出席管理システム - パスワード変更</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='password.css') }}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.2.0/sha256.min.js "></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='sha256.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='loginpost.js') }}"></script>
+    </head>
+
+    <body>
+    <div class="wrapper">
+        <header class="header">
+            <h1 class="title">出席管理システム</h1>
+        </header>
+    <div class="wrap">
+        <div  name="passCheck">
+            <div class="login">
+            <ul>
+                <a>ユーザーID</a>
+                <input type="text" name="user_name" value="{{id}}">
+            </ul>
+
+            <ul id="pass">
+                <a>パスワード</a>
+                <input type="password" name="password" value="">
+            </ul>
+            </div>
+
+            <div id="pass_re">
+            <ul>
+                <a>パスワード再入力</a>
+                <input type="password" id="password_re" name="password_re" value="">
+            </ul>
+            </div>
+
+            
+            <div class="button">
+            <ul>   
+                <a href="password.html"><input type="submit" name="change" value="変更" /></a>
+                <input type="button" name="change" value="変更" onclick="post_form_newpass()"/>
+            </ul>
+            </div>
+        </div>
+    </div>
+    </div>
+    </body>
+</html>

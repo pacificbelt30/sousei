@@ -12,30 +12,42 @@
     <body>
     <div class="wrapper">
         <header class="header">
-            <h1 class="title"><a href="select.html">出席管理</a></h1>
+                <div class="head">
+                <h1 class="title"><a href='{{ url_for('kamoku_all') }}'>出席管理</a></h1>
+                <!--ユーザーIDとログアウト-->
+                <ul class="logname">
+                    <li>ユーザーID：{{id}}</li>
+                    <li id="logout"><a href='{{ url_for('auth.logout_get') }}'>ログアウト</a></li>
+                <!--パスワード変更リンク-->
+                    <li id="change_link"><a href='{{ url_for('auth.chpass_get') }}'>パスワードを変更</a></li>
+                </ul>
+                </div>
             <nav class="nav">
                 <ul class="main-nav">
                     <li><a href='{{ url_for('kamoku_all') }}'>講義選択</a></li>
                     <li><a href='{{ url_for('syusseki_all',kamoku=kamoku) }}'>データ閲覧</a></li>
                     <li><a href='{{ url_for('edit.edit_get',kamoku=kamoku) }}'>時間設定</a></li>
-                    <li><a href='{{ url_for('auth.logout_get') }}'>ログアウト</a></li>
                 </ul>
             </nav>
         </header>
 
         <main>
             
-            <p>{{kamoku}}</p>
+            <div class="lec_name">
+                <h2>{{kamoku}}:{{kamoku_name}}</h2>
+            </div>
             <!--時間の入力部分-->
             <form id="form" action="{{ url_for('edit.edit_post',kamoku=kamoku) }}" method="POST" enctype="multipart/form-data">
                 <ul class="time" >    
                 <li class="time_text">出席限度時間：</li>
                 <li><input type="text" name="syusseki_gendo" value="{{kisoku['syusseki_gendo']}}"></li>
+                <li class="minute">分間</li>
                 </ul>
 
                 <ul class="time">
                 <li class="time_text">遅刻限度時間：</li>
                 <li><input type="text" name="tikoku_gendo" value="{{kisoku['tikoku_gendo']}}"></li>
+                <li class="minute">分間</li>
                 </ul>
                     
                 <ul>

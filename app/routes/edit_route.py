@@ -26,10 +26,11 @@ def edit_get():
     print('userid:',current_user.id)
     print('username:',current_user.kyoin.name)
     print('kamoku:',kamoku)
+    kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first().name
     #json = request.get_json()
     kisokudata = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
 
-    return render_template('time.html',data=kisokudata,kisoku=KamokuKisokuSchema().dump(kisokudata),kamoku=kamoku)
+    return render_template('time.html',id=current_user.id,kamoku_name=kamoku_name,data=kisokudata,kisoku=KamokuKisokuSchema().dump(kisokudata),kamoku=kamoku)
     #pass
 
 # 送信されることを期待するデータ

@@ -11,13 +11,20 @@
     <body>
         <div class="wrapper">
             <header class="header">
-                <h1 class="title"><a href="select.html">出席管理</a></h1>
+                <div class="head">
+                <h1 class="title"><a href='{{ url_for('kamoku_all') }}'>出席管理</a></h1>
+                <!--ユーザーIDとログアウト-->
+                <ul class="logname">
+                    <li>ユーザーID：{{id}}</li>
+                    <li id="logout"><a href='{{ url_for('auth.logout_get') }}'>ログアウト</a></li>
+                    <li id="change_link"><a href='{{ url_for('auth.chpass_get') }}'>パスワードを変更</a></li>
+                </ul>
+                </div>
                 <nav class="nav">
                     <ul class="main-nav">
                         <li><a href='{{ url_for('kamoku_all') }}'>講義選択</a></li>
                         <li ><a href="javascript:OnLinkClick();">データ閲覧</a></li>
                         <li ><a href="javascript:OnLinkClick();">時間設定</a></li>
-                        <li><a href='{{ url_for('auth.logout_get') }}'>ログアウト</a></li>
                 </ul>
                     </ul>
                 </nav>
