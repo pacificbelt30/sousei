@@ -40,10 +40,12 @@ function postForm() {
 // パスワード変更時に使用する
 function post_form_newpass() {
   let form = document.createElement('form');
+  /*
   let userid = document.createElement('input');
   userid.type = 'hidden';
   userid.name = 'id';
-  userid.value = document.getElementById('userid').value;
+  userid.value = document.getElementById('user_name').value;
+  */
   let pass = document.createElement('input');
   pass.type = 'hidden';
   pass.name = 'password';
@@ -69,8 +71,8 @@ function post_form_newpass() {
   console.log(pass.value);
   form.method = 'POST';
   //form.action = 'http://localhost/auth/chpass';
-  form.action = '/auth/';
-  form.appendChild(userid);
+  form.action = '/auth/chpass';
+  //form.appendChild(userid);
   form.appendChild(pass);
   form.appendChild(remember);
   document.body.appendChild(form);

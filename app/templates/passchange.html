@@ -20,14 +20,16 @@
     <div class="wrap">
         <div  name="passCheck">
             <div class="login">
+            <!--
             <ul>
                 <a>ユーザーID</a>
-                <input type="text" name="user_name" value="{{id}}">
+                <input type="text" id="user_name" name="user_name" value="{{id}}">
             </ul>
+            -->
 
             <ul id="pass">
                 <a>パスワード</a>
-                <input type="password" name="password" value="">
+                <input type="password" id="password" name="password" value="">
             </ul>
             </div>
 
@@ -41,7 +43,6 @@
             
             <div class="button">
             <ul>   
-                <a href="password.html"><input type="submit" name="change" value="変更" /></a>
                 <input type="button" name="change" value="変更" onclick="post_form_newpass()"/>
             </ul>
             </div>
