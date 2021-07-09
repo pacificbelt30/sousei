@@ -1,5 +1,6 @@
 // 要注意者を表示する関数
 let attention_limit = 2
+let attention_list = []
 function create_attention_table(){
   let attend_table = document.getElementById('attend');
   let table = document.getElementById('attention');
@@ -27,6 +28,9 @@ function create_attention_table(){
       // if の数字で何回から要注意者か設定する
       if(count>=attention_limit){
               attend_table.rows[i+2].cells[0].style.background = 'red'; // 要注意者のidのセルを赤くした
+              
+              attention_list.push(syusseki_list[i])
+              console.log(syusseki_list[i]);
               let newRow = table.insertRow();
               let newCell = newRow.insertCell();
               let newText = document.createTextNode(num[i][1]);

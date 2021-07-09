@@ -46,13 +46,14 @@
                 <!--ページ内切り替えの表の部分-->
                 <input id="tab1" type="radio" name="TAB" class="tabswitch" checked="checked"><label class="tablabel" for="tab1">表</label>
                 <div class="tabbody">
-                    <button type="button" class="download" onclick="download(arrToCSV(join_head_body()),'{{kamoku}}.csv')">ダウンロード</button>
+                    <button type="button" class="download" onclick="download(arrToCSV(join_head_body(syusseki_list)),'{{kamoku}}.csv')">ダウンロード</button>
+                    <button type="button" class="download" onclick="download(arrToCSV(join_head_body(attention_list)),'{{kamoku}}_attention.csv')">要注意者リストダウンロード</button>
 
                     <!--出席データの表-->
                     <table border="1" id="attend">
                         <thead>
                             <tr>
-                                <th></th><th></th><th colspan="15">講義回</th><th colspan="2">累計</th>
+                                <th></th><th></th><th colspan="15">講義回</th><th colspan="3">累計</th>
                             </tr>
                             <tr>
                                 <th id="number">学籍番号</th><th id="name">名前</th>
@@ -74,6 +75,7 @@
                                 <th width="25" class="count">15</th>
                                 <th width="25" class="sum">出席</th>
                                 <th width="25" class="sum">遅刻</th>
+                                <th width="25" class="sum">欠席</th>
                             </tr>
                         </thead>
                     </table>
@@ -190,7 +192,8 @@
     </div>
         <script>
             //テーブルのヘッダ部分の配列
-            let table_header = {{table_header|safe}};
+            //let table_header = {{table_header|safe}};
+            let table_header = ['学籍番号','氏名','第1回','第2回','第3回','第4回','第5回','第6回','第7回','第8回','第9回','第10回','第11回','第12回','第13回','第14回','第15回','出席','遅刻','欠席']
             // 出席データ
             let syusseki_list = [];
             // 履修データ

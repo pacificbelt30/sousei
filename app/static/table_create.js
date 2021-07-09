@@ -17,7 +17,7 @@ function table_create(){
       syusseki_list.push([]);
       syusseki_list[i].push(risyu_list[i]['number']);
       syusseki_list[i].push(risyu_list[i]['name']);
-      for(j=0;j<17;j++){
+      for(j=0;j<18;j++){
           syusseki_list[i].push('');
       }
   }
@@ -69,8 +69,14 @@ function table_create(){
   for(let i=0;i<syusseki_list.length;i++){
     let table_body = document.getElementById('attend').tBodies;
     //console.log(i,syusseki_list.length);
-    table_body[0].rows[i].cells[17].innerHTML = count_attend(syusseki_list[i]);
-    table_body[0].rows[i].cells[18].innerHTML = count_late(syusseki_list[i]);
+    let attend = count_attend(syusseki_list[i]);
+    let late = count_late(syusseki_list[i]);
+    table_body[0].rows[i].cells[17].innerHTML = attend;
+    table_body[0].rows[i].cells[18].innerHTML = late;
+    table_body[0].rows[i].cells[19].innerHTML = lectured_list.length-(attend+late);
+    syusseki_list[i][17] = attend.toString();
+    syusseki_list[i][18] = late.toString();
+    syusseki_list[i][19] = (lectured_list.length-(attend+late)).toString();
   }
 }
 

@@ -86,14 +86,23 @@ def syusseki_all(kamoku):
     print('username:',current_user.kyoin.name)
     print('kamoku:',kamoku)
 
+    # 科目の名前
     kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first().name
     # 科目のデータ
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
 
     # 科目の出席データ
-    data = db.session.query(Syusseki).join(Risyu).filter(\
+    #data = db.session.query(Syusseki).join(Risyu).filter(\
+            #Risyu.kamoku_id==kamoku\
+            #).all()
+
+    # sqlを実行し，配列で結果をもらうことで高速化している
+    sql = db.session.query(Syusseki).join(Risyu).filter(\
             Risyu.kamoku_id==kamoku\
-            ).all()
+            )
+    sql = str(sql.statement.compile(dialect=mysql.dialect(),\
+                                  compile_kwargs={"literal_binds": True}))
+    data = db.session.execute(sql)
 
     # 科目の履修者データ(教員のidでも条件付をしている)
     risyudata = db.session.query(Risyu).join(Kamoku).filter(\
@@ -102,11 +111,9 @@ def syusseki_all(kamoku):
             Kamoku.kyoin_id1 == kyoin\
             ).all()
     risyujson = RisyuSchema(many=True).dump(risyudata)
-    #print(type(risyudata))
     risyujson = [ s['gakusei'] for s in risyujson ]
     #print('syusssekischema',risyujson)
-    #print(data)
-    #print(risyudata)
+
     lectured = db.session.query(Lectured).filter(\
             Lectured.kamoku_id == kamoku
             ).all()
@@ -126,16 +133,22 @@ def syusseki_all(kamoku):
 
     # [学生氏名,出欠,授業回数] の配列
     table = list()
-    for i in range(len(data)):
-    #for i in range(1500):
+    #for i in range(len(data)):
+    for i,d in enumerate(data):
         table.append([])
-        table[i].append(data[i].risyu.gakusei.name)
-        table[i].append(data[i].syukketu)
-        table[i].append(data[i].kaisu)
+        #table[i].append(data[i].risyu.gakusei.name)
+        #table[i].append(data[i].syukketu)
+        #table[i].append(data[i].kaisu)
+        table[i].append(d[12])
+        table[i].append(d[2])
+        table[i].append(d[3])
 
-    #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
-    #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)
-    return render_template('view.html',id=current_user.id,kamoku_name=kamoku_name,table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=sorted(lectured_list))
+    return render_template('view.html',id=current_user.id,\
+            kamoku_name=kamoku_name,table_header=table_header,\
+            syusseki_data=sorted(table,key=lambda x: x[0]),\
+            risyu_list=risyusya_info_list,kamoku_data=kamoku_data,\
+            kamoku=kamoku,lectured_list=sorted(lectured_list))
+    #いらないかもしれないデータ table_header,kamoku_data
 
 # 科目の出席データ ベンチ用ページ
 @app.route('/bench/<string:kamoku>',methods=['GET'])
@@ -145,6 +158,8 @@ def bench_syusseki(kamoku):
     print('出席データ閲覧ページ：')
     print('kamoku:',kamoku)
 
+    # 科目の名前
+    kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==kyoin,Kamoku.id==kamoku).first().name
     # 科目のデータ
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
 
@@ -154,7 +169,11 @@ def bench_syusseki(kamoku):
             #Risyu.kamoku_id==kamoku\
             #)
     #print(data.statement.compile(dialect=mysql.dialect(),compile_kwargs={"literal_binds":True}))
-    sql = "SELECT syusseki.id, syusseki.risyu_id, syusseki.syukketu, syusseki.kaisu, syusseki.regist_date, kamoku_1.id AS id_1, kamoku_1.name, kamoku_1.timedef_id, kamoku_1.room, kamoku_1.youbi, kamoku_1.kyoin_id1, gakusei_1.id AS id_2, gakusei_1.name AS name_1, gakusei_1.kana, gakusei_1.seibetu, gakusei_1.gakunen, gakusei_1.number, risyu_1.id AS id_3, risyu_1.kamoku_id, risyu_1.gakusei_id FROM syusseki INNER JOIN risyu ON risyu.id = syusseki.risyu_id LEFT OUTER JOIN risyu AS risyu_1 ON risyu_1.id = syusseki.risyu_id LEFT OUTER JOIN kamoku AS kamoku_1 ON kamoku_1.id = risyu_1.kamoku_id LEFT OUTER JOIN gakusei AS gakusei_1 ON gakusei_1.number = risyu_1.gakusei_id WHERE risyu.kamoku_id = 'F1'"
+    sql = db.session.query(Syusseki).join(Risyu).filter(\
+            Risyu.kamoku_id==kamoku\
+            )
+    sql = str(sql.statement.compile(dialect=mysql.dialect(),\
+                                  compile_kwargs={"literal_binds": True}))
     data = db.session.execute(sql)
     #for i in data:
         #print(i)
@@ -210,7 +229,12 @@ def bench_syusseki(kamoku):
 
     #return render_template('syukketu.html',syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data)
     #return render_template('syukketu2.html',table_header=table_header,syusseki_data=sorted(table_array,key=lambda x: x[0]),kamoku_data=kamoku_data,kamoku=kamoku)
-    return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=sorted(lectured_list))
+    #return render_template('view.html',table_header=table_header,syusseki_data=sorted(table,key=lambda x: x[0]),risyu_list=risyusya_info_list,kamoku_data=kamoku_data,kamoku=kamoku,lectured_list=sorted(lectured_list))
+    return render_template('view.html',id=kyoin,\
+            kamoku_name=kamoku_name,table_header=table_header,\
+            syusseki_data=sorted(table,key=lambda x: x[0]),\
+            risyu_list=risyusya_info_list,kamoku_data=kamoku_data,\
+            kamoku=kamoku,lectured_list=sorted(lectured_list))
 
 
 # データベース作成

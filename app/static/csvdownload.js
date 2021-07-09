@@ -32,9 +32,10 @@ function download(data, name) {
   }
 }
 
-function join_head_body(){
-  let arr = syusseki_list;
-  arr.unshift(table_header);
-  console.log(arr);
-  return arr;
+function join_head_body(arr){
+  //let arr = syusseki_list;
+  tmp = arr;
+  tmp.unshift(table_header);
+  console.log(tmp);
+  return tmp;
 }
