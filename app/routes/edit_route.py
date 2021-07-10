@@ -29,6 +29,8 @@ def edit_get():
     kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first().name
     #json = request.get_json()
     kisokudata = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
+    print('kisokudata:syusseki_gendo:',kisokudata.syusseki_gendo)
+    print('kisokudata:tikoku_gendo:',kisokudata.tikoku_gendo)
 
     return render_template('time.html',id=current_user.id,kamoku_name=kamoku_name,data=kisokudata,kisoku=KamokuKisokuSchema().dump(kisokudata),kamoku=kamoku)
     #pass

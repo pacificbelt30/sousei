@@ -239,29 +239,11 @@ def bench_syusseki(kamoku):
 
 # データベース作成
 # 危ないのでそのうち消す
-@app.route('/makedb',methods=['GET'])
+#@app.route('/makedb',methods=['GET'])
 def mkdb():
     from app.makedb import makedb
     makedb()
     return '成功'
-
-# 
-@app.route('/user/<string:name>',methods=['GET'])
-def user_index(name):
-    print(name)
-    return name
-    #pass
-
-# テストしたいとき
-@app.route('/test/test1',methods=['GET'])
-def test1():
-    test = db.session.query(Gakusei).filter(Gakusei.id == 12)
-    print(test)
-    print(test.all())
-    print(test.all() == [])
-    #print(len(test))
-    print(len(test.all()))
-    return "true"
 
 # 500 Internal Server Error ハンドル
 @app.errorhandler(500)

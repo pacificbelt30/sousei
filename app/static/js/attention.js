@@ -1,5 +1,5 @@
 // 要注意者を表示する関数
-let attention_limit = 2
+let attention_limit = 3 // 注意者欠席上限
 let attention_list = []
 function create_attention_table(){
   let attend_table = document.getElementById('attend');
