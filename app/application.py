@@ -37,11 +37,14 @@ def create_app():
     app.config["SQLALCHEMY_POOL_PRE_PING"] = True
 
     return app
+
 app = create_app()
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
-cache = Cache(config={"CACHE_TYPE":"simple"})
+db = SQLAlchemy(app) # データベース
+ma = Marshmallow(app) # データスキーム
+# キャッシュ設定
+cache = Cache(config={"CACHE_TYPE":"simple"}) 
 cache.init_app(app)
+# ログイン設定
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "auth.login_get"
@@ -53,6 +56,7 @@ def load_user(user_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
     return LoginUser.query.get(user_id)
 
+# pingを送って接続を確立する らしい…
 @db.event.listens_for(Pool, "checkout")
 def ping_connection(dbapi_connection, connection_record, connection_proxy):
     cursor = dbapi_connection.cursor()

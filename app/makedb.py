@@ -2,7 +2,7 @@
 from app.application import db
 from app.models.model import *
 
-def makedb():
+def makedb(testflag):
     #データ登録
     db.create_all()
     Gakusei.csv_reg('data/gakuseilist.csv')
@@ -13,11 +13,12 @@ def makedb():
     kamokudata = db.session.query(Kamoku).all()
     for s in kamokudata:
         Risyu.csv_reg(s.id)
+    LoginUser.csv_reg()
 
     # テストデータ
-    for i in range(1,16):
-        Syusseki.csv_reg("data/syusseki2.csv","F1",i)
-    Syusseki.csv_reg("data/syusseki2.csv","M2",1)
-    Syusseki.csv_reg("data/syusseki2.csv","M2",3)
-    LoginUser.csv_reg()
+    if testflag:
+        for i in range(1,16):
+            Syusseki.csv_reg("data/syusseki2.csv","F1",i)
+        Syusseki.csv_reg("data/syusseki2.csv","M2",1)
+        Syusseki.csv_reg("data/syusseki2.csv","M2",3)
 
