@@ -114,6 +114,7 @@ def syusseki_all(kamoku):
     risyujson = [ s['gakusei'] for s in risyujson ]
     #print('syusssekischema',risyujson)
 
+    # 講義回数のデータ
     lectured = db.session.query(Lectured).filter(\
             Lectured.kamoku_id == kamoku
             ).all()

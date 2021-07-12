@@ -399,8 +399,12 @@ class Syusseki(db.Model):
         try:
             if db.session.query(Lectured).filter(json_data["kamoku"] == Lectured.id, json_data["kaisu"] == Lectured.kaisu).first() is None:
                 date_today = str(datetime.date.today().month)+"/"+str(datetime.date.today().day) # 例2/29
-                dbdata_k = (Lectured(json_data["kamoku"],json_data["kaisu"],str(datetime.date.today()))) # 日付のみが欲しい場合はdate_todayに変更
+                dbdata_k = Lectured(json_data["kamoku"],json_data["kaisu"],str(datetime.date.today())) # 日付のみが欲しい場合はdate_todayに変更
                 print('dbdata_k:',dbdata_k)
+                c = True
+            else:
+                print("該当の回数データはすでに入力されています 科目："+str(json_data["kamoku"])+" 回数："+str(json_data["kaisu"]))
+                c = False
         except:
             import traceback
             traceback.print_exc()
@@ -410,8 +414,9 @@ class Syusseki(db.Model):
         try:
             db.session.add_all(dbdata)
             db.session.commit()
-            db.session.add(dbdata_k)
-            db.session.commit()
+            if c:
+                db.session.add(dbdata_k)
+                db.session.commit()
         except:
             import traceback
             traceback.print_exc()
