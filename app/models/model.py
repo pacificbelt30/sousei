@@ -372,11 +372,10 @@ class Syusseki(db.Model):
         data=list()
         s_data=list()
         for i in range(len(json_data['csv'])):
-            data.append(json_data['csv'][str(i)]['number'])
-            s_data.append(json_data['csv'][str(i)]['syusseki'])
+            data.append(json_data['csv'][i]['number'])
+            s_data.append(json_data['csv'][i]['syusseki'])
+
         print('dbdata:',data)
-        dbdata = list()
-        dbdata_k = list()
         for s in range(len(data)):
             try:
                 print(data[s])

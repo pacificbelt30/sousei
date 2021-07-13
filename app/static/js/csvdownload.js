@@ -34,7 +34,7 @@ function download(data, name) {
 
 function join_head_body(arr){
   //let arr = syusseki_list;
-  tmp = arr;
+  tmp = arr.slice();
   tmp.unshift(table_header);
   console.log(tmp);
   return tmp;

@@ -87,9 +87,15 @@ def syusseki_all(kamoku):
     print('kamoku:',kamoku)
 
     # 科目の名前
-    kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first().name
+    kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first()
+    if kamoku_name is None:
+        return abort(404)
+    kamoku_name = kamoku_name.name
+
     # 科目のデータ
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
+    if kamoku_data is None:
+        return abort(404)
 
     # 科目の出席データ
     #data = db.session.query(Syusseki).join(Risyu).filter(\
@@ -113,12 +119,15 @@ def syusseki_all(kamoku):
     risyujson = RisyuSchema(many=True).dump(risyudata)
     risyujson = [ s['gakusei'] for s in risyujson ]
     #print('syusssekischema',risyujson)
+    # [学籍番号,学生氏名] の配列
+    risyusya_info_list = risyujson
 
     # 講義回数のデータ
     lectured = db.session.query(Lectured).filter(\
             Lectured.kamoku_id == kamoku
             ).all()
-    lectured_list = [s.kaisu for s in lectured ]
+    if lectured != []:
+        lectured_list = [s.kaisu for s in lectured ]
     print('講義開催回：',lectured_list)
 
     # 履修者データが空->ログインしている教員の担当科目ではない
@@ -128,9 +137,6 @@ def syusseki_all(kamoku):
     # 0列目学籍番号，1列目学生氏名，2~17列目各回の出席データ
     table_header = ['学籍番号','氏名','第1回','第2回','第3回','第4回','第5回','第6回',\
             '第7回','第8回','第9回','第10回','第11回','第12回','第13回','第14回','第15回']
-
-    # [学籍番号,学生氏名] の配列
-    risyusya_info_list = risyujson
 
     # [学生氏名,出欠,授業回数] の配列
     table = list()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_for
+from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_for,abort
 from flask_login import login_user, logout_user, login_required,current_user
 #from app.application import app
 from app.models.model import *
@@ -26,13 +26,19 @@ def edit_get():
     print('userid:',current_user.id)
     print('username:',current_user.kyoin.name)
     print('kamoku:',kamoku)
-    kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first().name
-    #json = request.get_json()
-    kisokudata = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
-    print('kisokudata:syusseki_gendo:',kisokudata.syusseki_gendo)
-    print('kisokudata:tikoku_gendo:',kisokudata.tikoku_gendo)
+    kamoku_name = db.session.query(Kamoku).filter(Kamoku.kyoin_id1==current_user.id,Kamoku.id==kamoku).first()
+    if kamoku_name is None:
+        return abort(404)
+    kamoku_name = kamoku_name.name
 
-    return render_template('time.html',id=current_user.id,kamoku_name=kamoku_name,data=kisokudata,kisoku=KamokuKisokuSchema().dump(kisokudata),kamoku=kamoku)
+    #json = request.get_json()
+    kisoku_data = db.session.query(KamokuKisoku).filter(KamokuKisoku.id == kamoku).first()
+    if kisoku_data is None:
+        return abort(404)
+    print('kisokudata:syusseki_gendo:',kisoku_data.syusseki_gendo)
+    print('kisokudata:tikoku_gendo:',kisoku_data.tikoku_gendo)
+
+    return render_template('time.html',id=current_user.id,kamoku_name=kamoku_name,data=kisoku_data,kisoku=KamokuKisokuSchema().dump(kisoku_data),kamoku=kamoku)
     #pass
 
 # 送信されることを期待するデータ
@@ -50,8 +56,12 @@ def edit_post(kamoku:str):
     #start_syusseki = request.form["start_syusseki"]
     #start_tikoku = request.form["start_tikoku"]
     #end_uketuke = request.form["end_uketuke"]
-    syusseki_gendo = request.form['syusseki_gendo']
-    tikoku_gendo = request.form['tikoku_gendo']
+    try:
+        syusseki_gendo = request.form['syusseki_gendo']
+        tikoku_gendo = request.form['tikoku_gendo']
+    except:
+        return redirect(url_for('edit.edit_get',kamoku=kamoku)) #     #pass
+        
     print('規則データ編集ページPOST->',kamoku)
     print('syusseki_gendo:',syusseki_gendo)
     print('tikoku_gendo:',tikoku_gendo)
