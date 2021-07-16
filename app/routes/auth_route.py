@@ -97,5 +97,20 @@ def resetpassword_post():
         db.session.rollback()
         print('RESET_PASSWORD_ERROR','id:',current_user.id)
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('auth.login_get'))
 
+@auth_route.route('/resetpassword/<string:user_id>',methods=['GET'])
+def resetpassword_get(user_id):
+    import hashlib
+    hash=lambda x:hashlib.sha256(x).hexdigest()
+
+    user = db.session.query(LoginUser).filter(LoginUser.id == user_id).first()
+    user.password = hash(user_id.encode())
+    try:
+        db.session.commit()
+        print('RESET_PASSWORD_SUCCESS','id:',user_id)
+    except:
+        db.session.rollback()
+        print('RESET_PASSWORD_ERROR','id:',user_id)
+
+    return redirect(url_for('auth.login_get'))

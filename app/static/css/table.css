@@ -49,6 +49,8 @@
   margin: 0 auto 0 auto;
 }
 
+
+
 #attention {
   width: 20%;
   border-right: 1px solid #3c6690;
@@ -64,3 +66,18 @@
   border-bottom: 1px solid #3c6690;
 }
 
+#number{
+  width: auto;
+}
+
+#name{
+  width: auto;
+}
+
+.count{
+  width: auto;
+}
+
+.sum{
+  width: auto;
+}
