@@ -49,7 +49,13 @@ function post_form_newpass() {
   let pass = document.createElement('input');
   pass.type = 'hidden';
   pass.name = 'password';
-  if(document.getElementById('password').value == document.getElementById('password_re').value){
+  pass_value = document.getElementById('password').value;
+  repass_value = document.getElementById('password_re').value;
+  if(pass_value == '' || repass_value == ''){
+    console.log('error');
+    return ;
+  }
+  else if(document.getElementById('password').value == document.getElementById('password_re').value){
     pass.value = document.getElementById('password_re').value;
   }
   else{

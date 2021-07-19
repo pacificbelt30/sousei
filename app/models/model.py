@@ -371,6 +371,7 @@ class Syusseki(db.Model):
         
         data=list()
         s_data=list()
+        dbdata=list()
         for i in range(len(json_data['csv'])):
             data.append(json_data['csv'][i]['number'])
             s_data.append(json_data['csv'][i]['syusseki'])
@@ -378,9 +379,10 @@ class Syusseki(db.Model):
         print('dbdata:',data)
         for s in range(len(data)):
             try:
-                print(data[s])
+                #print(data[s])
                 #print(type(data[s]))
-                # print(json_data["kamoku"])
+                print(data[s])
+                print(json_data["kamoku"])
                 
                 risyu = db.session.query(Risyu).filter(\
                         data[s]==Risyu.gakusei_id,\
