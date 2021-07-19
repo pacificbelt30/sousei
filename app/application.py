@@ -71,3 +71,9 @@ def ping_connection(dbapi_connection, connection_record, connection_proxy):
         # connecting again up to three times before raising.
         raise exc.DisconnectionError()
     cursor.close()
+
+def db_ping():
+    try:
+        db.session.query(Timedef).all()
+    except:
+        print('PING:データベース接続エラー')

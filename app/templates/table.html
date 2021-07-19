@@ -1,0 +1,19 @@
+
+                <table border="1" id="lecture">
+                    <thead>
+                        <tr>
+                            <th id="id">科目ID</th>
+                            <th id="name">科目名</th>
+                            <th id="kyoin">教員</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in kamoku %}
+                      <tr>
+                          <th>{{s.id}}</th>
+                          <th>{{s.name}}</th>
+                          <th>{{s.kyoin.name}}</th>
+                      </tr>
+                      {%endfor%}
+                    </tbody>
+                </table>

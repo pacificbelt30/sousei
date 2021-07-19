@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,url_for,redirect,abort
 from flask_login import login_required,current_user
-from app.application import app,cache
+from app.application import app,cache,db_ping
 from app.models.model import *
 from app.models.schema import *
 from app.routes import rasp_route,edit_route,auth_route
@@ -40,6 +40,7 @@ def index():
     return render_template('index.html',data=data)
 
 # testをしたいとき
+"""
 @app.route('/test',methods=['GET'])
 @login_required
 def test():
@@ -47,6 +48,7 @@ def test():
     print(data.timedef.zikan)
     # ajax cookie test
     return jsonify({"id":current_user.id})
+"""
 
 # 科目選択ページ 
 # 取得データ
@@ -57,6 +59,7 @@ kamoku_data = [KamokuClass1,KamokuClass2]
 @login_required
 #@cache.cached(timeout=60)
 def kamoku_all():
+    db_ping()
     #kyoin = request.args.get('kyoin')
     kyoin = current_user.id
     kamoku_data = db.session.query(Kamoku).join(Kyoin).filter(Kyoin.id==kyoin).all()
@@ -80,6 +83,7 @@ syusseki_data：出席データ ex)[['A','出席',1],['B','出席',2],...]
 @login_required
 @cache.cached(timeout=30)
 def syusseki_all(kamoku):
+    db_ping()
     kyoin = current_user.id
     print('出席データ閲覧ページ：')
     print('userid:',current_user.id)
@@ -128,6 +132,8 @@ def syusseki_all(kamoku):
             ).all()
     if lectured != []:
         lectured_list = [s.kaisu for s in lectured ]
+    else:
+        lectured_list = []
     print('講義開催回：',lectured_list)
 
     # 履修者データが空->ログインしている教員の担当科目ではない
@@ -158,6 +164,7 @@ def syusseki_all(kamoku):
     #いらないかもしれないデータ table_header,kamoku_data
 
 # 科目の出席データ ベンチ用ページ
+"""
 @app.route('/bench/<string:kamoku>',methods=['GET'])
 #@cache.cached(timeout=30)
 def bench_syusseki(kamoku):
@@ -242,15 +249,24 @@ def bench_syusseki(kamoku):
             syusseki_data=sorted(table,key=lambda x: x[0]),\
             risyu_list=risyusya_info_list,kamoku_data=kamoku_data,\
             kamoku=kamoku,lectured_list=sorted(lectured_list))
+"""
+
+# 教員と科目名と科目IDの対応表
+@app.route('/table',methods=['GET'])
+def table_get():
+    kamoku = db.session.query(Kamoku).all()
+    return render_template('table.html',kamoku=kamoku)
 
 
 # データベース作成
 # 危ないのでそのうち消す
 #@app.route('/makedb',methods=['GET'])
+"""
 def mkdb():
     from app.makedb import makedb
     makedb()
     return '成功'
+"""
 
 # 500 Internal Server Error ハンドル
 @app.errorhandler(500)

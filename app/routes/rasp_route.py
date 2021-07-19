@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,Blueprint
 #from app.application import app
+from app.application import app,cache,db_ping
 from app.models.model import *
 import json
 import time
@@ -12,6 +13,7 @@ rasp_route = Blueprint('csv', __name__, url_prefix='/csv')
 #/csv からアクセスできる
 @rasp_route.route('/',methods=['POST'])
 def csv_post():
+    db_ping()
     # json = request.get_json()
     # print(json)
     # Syusseki.csv_reg_nf(json)
@@ -45,6 +47,7 @@ def csv_post():
 """
 @rasp_route.route('/',methods=['GET'])
 def csv_get():
+    db_ping()
     kamoku = request.args.get('kamoku') # getパラメータ取得 ex) /csv?kamoku=F1
     # print(type(kamoku))
     #json = request.get_json()

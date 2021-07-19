@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request,jsonify,render_template,Blueprint,redirect,url_for,session
 from flask_login import login_user, logout_user, login_required,current_user
-from app.application import app
+from app.application import app,cache,db_ping
 from app.models.model import *
 from app.models.schema import *
 import time
@@ -14,6 +14,7 @@ auth_route = Blueprint('auth', __name__, url_prefix='/auth')
 # ログインしている場合は/user にリダイレクト
 @auth_route.route('/',methods=['GET'])
 def login_get():
+    db_ping()
     print('ログインページ：')
     if current_user.is_authenticated: # ログインしている場合は科目選択ページへ
         return redirect(url_for('kamoku_all'))
@@ -30,6 +31,7 @@ password：SHA256でハッシュ化されたpassword文字列
 """
 @auth_route.route('/',methods=['POST'])
 def login_post():
+    db_ping()
     try:
         id = request.form.get('id')
         password = request.form.get('password') # sha256
@@ -54,6 +56,7 @@ def login_post():
 @auth_route.route('/logout',methods=['GET'])
 @login_required
 def logout_get():
+    db_ping()
     print('logout:',current_user.kyoin.name)
     logout_user()
     return redirect(url_for('auth.login_get'))
@@ -62,6 +65,7 @@ def logout_get():
 @auth_route.route('/chpass',methods=['GET'])
 @login_required
 def chpass_get():
+    db_ping()
     print('パスワード変更ページ：')
     print('userid:',current_user.id)
     print('username:',current_user.kyoin.name)
@@ -71,6 +75,7 @@ def chpass_get():
 @auth_route.route('/chpass',methods=['POST'])
 @login_required
 def chpass_post():
+    db_ping()
     if request.form.get('password') is not None:
         current_user.password = request.form.get('password')
     try:
@@ -86,6 +91,7 @@ def chpass_post():
 @auth_route.route('/resetpassword',methods=['POST'])
 @login_required
 def resetpassword_post():
+    db_ping()
     import hashlib
     hash=lambda x:hashlib.sha256(x).hexdigest()
 
@@ -101,6 +107,7 @@ def resetpassword_post():
 
 @auth_route.route('/resetpassword/<string:user_id>',methods=['GET'])
 def resetpassword_get(user_id):
+    db_ping()
     import hashlib
     hash=lambda x:hashlib.sha256(x).hexdigest()
 
