@@ -16,6 +16,7 @@ def makedb(testflag):
     LoginUser.csv_reg()
 
     # テストデータ
+    print('テストデータflag',testflag)
     if testflag:
         for i in range(1,16):
             Syusseki.csv_reg("data/syusseki2.csv","F1",i)

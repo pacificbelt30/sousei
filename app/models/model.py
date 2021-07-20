@@ -422,6 +422,8 @@ class Syusseki(db.Model):
             import traceback
             traceback.print_exc()
             db.session.rollback()
+            return False
+        return True
 
 # 講義回数データ
 # 各科目の講義の何回目が何日に行われたかがわかる

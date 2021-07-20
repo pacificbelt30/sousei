@@ -23,8 +23,14 @@ def csv_post():
     print(type(data))
     data_j = json.loads(data)
     print(type(data_j))
-    Syusseki.csv_reg_nf(data_j)
-    return jsonify(data_j)
+    if Syusseki.csv_reg_nf(data_j):
+        #return_json = {'status':200,data_j}
+        return_json = {'status':200,'data':data_j}
+        return jsonify(return_json),200
+    else:
+        #return_json = {'status':300,data_j}
+        return_json = {'status':400,'data':data_j}
+        return jsonify(return_json),400
 
 #/csv からアクセスできる
 """

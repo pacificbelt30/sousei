@@ -7,5 +7,5 @@ def run():
     app.run(host='0.0.0.0')
     #app.run(host='0.0.0.0',threaded=True)
 
-def makedb():
-    mb()
+def makedb(flag):
+    mb(flag)
