@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from app.application import db
 from app.models.model import *
+from app import env
 
 def makedb(testflag):
     #データ登録
+    dbname = env.DB_NAME
+    sql = 'CREATE DATABASE IF NOT EXISTS `%s`;' % dbname
+    db.session.execute(sql)
     db.create_all()
     Gakusei.csv_reg('data/gakuseilist.csv')
     Kyoin.csv_reg('data/kyoin.csv')
