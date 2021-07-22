@@ -10,9 +10,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: python_test
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: docker
+      MYSQL_DATABASE: sousei_db
+      MYSQL_USER: team4
+      MYSQL_PASSWORD: team4
     ports:
       - 3306:3306
 
@@ -31,6 +31,10 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile_nginx
+    volumes:
+      - .:/var/flaskapp
+    command: /bin/bash /var/flaskapp/docker/run.sh
+    tty: true
     ports:
       - 5002:80
       - 5001:5000
