@@ -39,8 +39,8 @@ services:
     tty: true
     restart: always
     ports:
-      - 5002:80
-      - 5001:5000
+      - 13431:80
+      - 37564:5000
     depends_on:
       db:
         condition: service_healthy
