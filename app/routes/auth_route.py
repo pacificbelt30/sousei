@@ -105,11 +105,19 @@ def resetpassword_post():
     logout_user()
     return redirect(url_for('auth.login_get'))
 
+# パスワードリセット，管理者用
 @auth_route.route('/resetpassword/<string:user_id>',methods=['GET'])
 def resetpassword_get(user_id):
     db_ping()
+    get_pass = request.args.get('p') # パスワード指定 
+    password = 'team4'
     import hashlib
     hash=lambda x:hashlib.sha256(x).hexdigest()
+    password = str(hash(password))
+    print(password)
+    if password != get_pass:
+        print('管理者のパスワードが違います')
+        return
 
     user = db.session.query(LoginUser).filter(LoginUser.id == user_id).first()
     user.password = hash(user_id.encode())
@@ -121,3 +129,4 @@ def resetpassword_get(user_id):
         print('RESET_PASSWORD_ERROR','id:',user_id)
 
     return redirect(url_for('auth.login_get'))
+
